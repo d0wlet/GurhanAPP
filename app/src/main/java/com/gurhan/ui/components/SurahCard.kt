@@ -8,12 +8,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gurhan.data.model.Surah
 import com.gurhan.ui.theme.TealPrimary
+import com.gurhan.ui.theme.TextPrimary
+import com.gurhan.ui.theme.TextSecondary
+import com.gurhan.ui.theme.DividerColor
 
 @Composable
 fun SurahCard(
@@ -21,80 +25,84 @@ fun SurahCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
+    // iOS Style List Item: Minimalist, clean, separated by divider
+    Column(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            .clickable(onClick = onClick)
+            .background(Color.White)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(vertical = 16.dp, horizontal = 20.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Number container
-                Box(
-                    modifier = Modifier
-                        .size(44.dp)
-                        .background(
-                            color = TealPrimary.copy(alpha = 0.1f),
-                            shape = RoundedCornerShape(12.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = surah.id.toString(),
-                        fontWeight = FontWeight.Bold,
-                        color = TealPrimary,
-                        fontSize = 16.sp
-                    )
-                }
-                
-                // Text group
-                Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                // Minimalist Number
+                Text(
+                    text = surah.id.toString(),
+                    fontSize = 17.sp,
+                    color = TextSecondary,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.width(28.dp)
+                )
+
+                // Info
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(
                         text = surah.name,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = TextPrimary
                     )
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = surah.revelationType,
-                            fontSize = 12.sp,
-                            color = Color.Gray
+                            text = surah.revelationType.uppercase(),
+                            fontSize = 11.sp,
+                            color = TextSecondary,
+                            fontWeight = FontWeight.Medium,
+                            letterSpacing = 0.5.sp
                         )
                         Box(
                             modifier = Modifier
                                 .size(3.dp)
-                                .background(Color.LightGray, shape = androidx.compose.foundation.shape.CircleShape)
+                                .clip(androidx.compose.foundation.shape.CircleShape)
+                                .background(TextSecondary.copy(alpha=0.5f))
                         )
                         Text(
-                            text = "${surah.versesCount} Aýat",
-                            fontSize = 12.sp,
-                            color = Color.Gray
+                            text = "${surah.versesCount} AÝAT",
+                            fontSize = 11.sp,
+                            color = TextSecondary,
+                            fontWeight = FontWeight.Medium,
+                            letterSpacing = 0.5.sp
                         )
                     }
                 }
             }
             
-            // Arabic name
+            // Arabic Name (Calligraphic)
             Text(
                 text = surah.arabicName,
-                fontSize = 20.sp,
-                color = TealPrimary
+                fontSize = 22.sp,
+                color = TealPrimary, // Branding touch
+                fontWeight = FontWeight.Normal,
+                fontFamily = androidx.compose.ui.text.font.FontFamily.Serif // More traditional feel for Arabic
             )
         }
+        
+        // Essential iOS element: The Divider
+        Divider(
+            modifier = Modifier.padding(start = 64.dp), // Indented divider
+            color = DividerColor,
+            thickness = 0.5.dp
+        )
     }
 }
