@@ -18,10 +18,11 @@ import com.gurhan.ui.theme.TealPrimary
 @Composable
 fun SurahCard(
     surah: Surah,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(16.dp),
