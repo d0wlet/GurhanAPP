@@ -69,19 +69,12 @@ fun HomeScreen(
                 // based on visibility.
                 
                 // Let's actually add the animation modifier
-                val animatedModifier = Modifier
-                    .graphicsLayer {
-                         // Simple static styling for now as staggered animations require more state management code
-                         // which might be risky to inject blindly
-                         // Instead, let's focus on perfect padding/layout matching the new font
-                    }
-
+            // Surah List
+            items(filteredSurahs) { surah ->
                 SurahCard(
                     surah = surah,
                     onClick = { onSurahClick(surah) },
-                    modifier = Modifier
-                        .padding(horizontal = 24.dp)
-                        .animateItemPlacement(tween(durationMillis = 300)) // Need ExperimentalFoundationApi
+                    modifier = Modifier.padding(horizontal = 24.dp)
                 )
             }
             
