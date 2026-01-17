@@ -37,7 +37,7 @@ fun BottomNavigationBar(
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = TealPrimary,
                     selectedTextColor = TealPrimary,
-                    indicatorColor = TealPrimary.copy(alpha = 0.1f),
+                    indicatorColor = Color.Transparent,
                     unselectedIconColor = Color.Gray,
                     unselectedTextColor = Color.Gray
                 )
