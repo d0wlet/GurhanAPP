@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Gurhan</string>
+    <string name="verse_of_day">Günün Aýaty</string>
+    <string name="search_hint">Süre gözle...</string>
+    <string name="ayatlar">Ayatlar</string>
+    <string name="bellikler">Bellikler</string>
+    <string name="sazlamalar">Sazlamalar</string>
+    <string name="read_full">Doly Oka</string>
+</resources>
