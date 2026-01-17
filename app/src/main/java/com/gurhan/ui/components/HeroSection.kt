@@ -3,6 +3,8 @@ package com.gurhan.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,37 +34,47 @@ fun HeroSection() {
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Greeting
+            // Greeting Row
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Top
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 // Date badge
                 Surface(
                     shape = RoundedCornerShape(20.dp),
-                    color = Color.White.copy(alpha = 0.2f),
-                    modifier = Modifier.padding(end = 8.dp)
+                    color = Color.White.copy(alpha = 0.2f)
                 ) {
-                    Text(
-                        text = "📅 Hijri Date",
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                        color = Color.White,
-                        fontSize = 14.sp
-                    )
+                    Row(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.CalendarToday,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Text(
+                            text = "15 Rejep 1447",
+                            color = Color.White,
+                            fontSize = 13.sp
+                        )
+                    }
                 }
                 
                 // Greeting
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
                         text = "Essalamu Aleýkum",
-                        fontSize = 20.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
                     Text(
                         text = "Hoş geldiňiz",
-                        fontSize = 14.sp,
+                        fontSize = 13.sp,
                         color = Color.White.copy(alpha = 0.9f)
                     )
                 }
@@ -72,7 +84,8 @@ fun HeroSection() {
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(20.dp),
@@ -80,17 +93,19 @@ fun HeroSection() {
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "⭐ GÜNÜN AÝATY",
-                            fontSize = 12.sp,
+                            text = "GÜNÜN AÝATY",
+                            fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
-                            color = TealGradientStart
+                            color = TealGradientStart,
+                            letterSpacing = 1.sp
                         )
                         Text(
                             text = "Fatiha 1",
-                            fontSize = 12.sp,
+                            fontSize = 11.sp,
                             color = Color.Gray,
                             fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
                         )
@@ -98,15 +113,17 @@ fun HeroSection() {
                     
                     Text(
                         text = "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
-                        fontSize = 24.sp,
+                        fontSize = 22.sp,
                         modifier = Modifier.fillMaxWidth(),
-                        textAlign = androidx.compose.ui.text.style.TextAlign.End
+                        textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                        lineHeight = 36.sp
                     )
                     
                     Text(
-                        text = "Rehimli we Mähirbanly Allahyň ady bilen",
-                        fontSize = 16.sp,
-                        color = Color.Gray
+                        text = "Rahman we Rahym bolan Allahyň ady bilen.",
+                        fontSize = 15.sp,
+                        color = Color.DarkGray,
+                        lineHeight = 22.sp
                     )
                     
                     Button(
@@ -117,7 +134,11 @@ fun HeroSection() {
                             containerColor = MaterialTheme.colorScheme.background
                         )
                     ) {
-                        Text("Doly Oka →", color = TealGradientStart)
+                        Text(
+                            "Doly Oka →",
+                            color = TealGradientStart,
+                            fontWeight = FontWeight.Medium
+                        )
                     }
                 }
             }
