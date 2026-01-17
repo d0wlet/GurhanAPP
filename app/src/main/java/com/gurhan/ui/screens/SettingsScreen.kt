@@ -2,7 +2,7 @@ package com.gurhan.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -47,7 +47,7 @@ fun SettingsScreen() {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = Icons.Default.DarkMode,
+                        imageVector = Icons.Default.Settings,
                         contentDescription = null,
                         tint = TealPrimary,
                         modifier = Modifier.size(24.dp)

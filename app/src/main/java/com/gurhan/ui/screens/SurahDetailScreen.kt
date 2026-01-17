@@ -82,7 +82,7 @@ fun SurahDetailScreen(
                             color = Color.White
                         )
                         Text(
-                            text = "${surah.place} • ${surah.versesCount} Aýat",
+                            text = "${surah.revelationType} • ${surah.versesCount} Aýat",
                             color = Color.White.copy(alpha = 0.8f)
                         )
                     }

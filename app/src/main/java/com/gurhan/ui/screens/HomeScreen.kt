@@ -2,6 +2,16 @@ package com.gurhan.ui.screens
 
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.gurhan.data.repository.QuranRepository
+import com.gurhan.ui.components.HeroSection
+import com.gurhan.ui.components.SearchBar
+import com.gurhan.ui.components.SurahCard
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 
