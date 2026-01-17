@@ -18,6 +18,7 @@ import com.gurhan.ui.components.BottomNavigationBar
 import com.gurhan.ui.navigation.BottomNavItem
 import com.gurhan.ui.screens.HomeScreen
 import com.gurhan.ui.screens.SettingsScreen
+import com.gurhan.ui.screens.SurahDetailScreen
 import com.gurhan.ui.theme.GurhanTheme
 
 class MainActivity : ComponentActivity() {
