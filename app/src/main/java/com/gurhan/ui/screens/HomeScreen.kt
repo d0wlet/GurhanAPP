@@ -55,20 +55,6 @@ fun HomeScreen(
                 )
             }
             
-            // Surah List with Animation
-            items(filteredSurahs.size) { index ->
-                val surah = filteredSurahs[index]
-                
-                // Staggered animation effect
-                // Creates a slide-in and fade-in effect for each item based on its index
-                // Note: In real production code, use AnimatedVisibility or a custom modifier. 
-                // For simplicity here, we rely on the fact that Compose recomposes.
-                // But a true staggered entrance needs a launched effect per item or a list-level transition.
-                // Let's keep it simple but elegant with just the data first.
-                // For a proper stagger in Compose without external libs, we can animate alpha/translation
-                // based on visibility.
-                
-                // Let's actually add the animation modifier
             // Surah List
             items(filteredSurahs) { surah ->
                 SurahCard(
