@@ -1,113 +1,159 @@
 package com.gurhan.data.repository
 
 import android.content.Context
-import android.util.Log
-import androidx.annotation.Keep
-import com.google.gson.Gson
-import com.google.gson.annotations.SerializedName
-import com.google.gson.reflect.TypeToken
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
 import com.gurhan.data.model.Surah
 import com.gurhan.data.model.Verse
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 
-class QuranRepository(private val context: Context) {
+class QuranRepository(private val context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
-    private var cachedSurahs: List<SurahWithVerses>? = null
-    
-    // Internal model matching JSON structure
-    @Keep
-    private data class SurahWithVerses(
-        @SerializedName("id") val id: Int,
-        @SerializedName("name") val name: String,
-        @SerializedName("arabicName") val arabicName: String,
-        @SerializedName("revelationType") val revelationType: String,
-        @SerializedName("versesCount") val versesCount: Int,
-        @SerializedName("verses") val verses: List<VerseJson>
-    )
+    companion object {
+        private const val DATABASE_NAME = "quran.db"
+        private const val DATABASE_VERSION = 1
+        private const val TABLE_SURAHS = "surahs"
+        private const val TABLE_VERSES = "verses"
+    }
 
-    @Keep
-    private data class VerseJson(
-        @SerializedName("number") val number: Int,
-        @SerializedName("text") val text: String
-    )
-
-    private fun loadData() {
-        if (cachedSurahs != null) return
-        
-        val jsonString: String
-        try {
-            jsonString = context.assets.open("quran_data.json").bufferedReader().use { it.readText() }
-            val listType = object : TypeToken<List<SurahWithVerses>>() {}.type
-            cachedSurahs = Gson().fromJson(jsonString, listType)
-        } catch (e: Exception) {
-            Log.e("QuranRepository", "Error loading/parsing quran data", e)
-            e.printStackTrace()
-            cachedSurahs = emptyList()
+    init {
+        // Copy DB from assets if not exists
+        val dbPath = context.getDatabasePath(DATABASE_NAME)
+        if (!dbPath.exists()) {
+            dbPath.parentFile?.mkdirs()
+            try {
+                copyDatabase(dbPath)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
         }
+    }
+
+    private fun copyDatabase(dbPath: File) {
+        context.assets.open(DATABASE_NAME).use { input ->
+            FileOutputStream(dbPath).use { output ->
+                input.copyTo(output)
+            }
+        }
+    }
+
+    // Required overrides
+    override fun onCreate(db: SQLiteDatabase?) {
+        // Database is pre-populated, nothing to create
+    }
+
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+        // For now, if version changes, we might want to delete and re-copy
+        context.deleteDatabase(DATABASE_NAME)
+        val dbPath = context.getDatabasePath(DATABASE_NAME)
+        copyDatabase(dbPath)
     }
 
     fun getAllSurahs(): List<Surah> {
-        loadData()
-        return cachedSurahs?.map { 
-             Surah(it.id, it.name, it.arabicName, it.revelationType, it.versesCount)
-        } ?: emptyList()
+        val surahs = mutableListOf<Surah>()
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT id, name, arabicName, revelationType, versesCount FROM $TABLE_SURAHS", null)
+        
+        if (cursor.moveToFirst()) {
+            do {
+                surahs.add(Surah(
+                    id = cursor.getInt(0),
+                    name = cursor.getString(1),
+                    arabicName = cursor.getString(2),
+                    revelationType = cursor.getString(3),
+                    versesCount = cursor.getInt(4)
+                ))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return surahs
     }
     
     fun getSurahById(id: Int): Surah? {
-        loadData()
-        val s = cachedSurahs?.find { it.id == id } ?: return null
-        return Surah(s.id, s.name, s.arabicName, s.revelationType, s.versesCount)
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT id, name, arabicName, revelationType, versesCount FROM $TABLE_SURAHS WHERE id = ?", arrayOf(id.toString()))
+        var surah: Surah? = null
+        if (cursor.moveToFirst()) {
+            surah = Surah(
+                id = cursor.getInt(0),
+                name = cursor.getString(1),
+                arabicName = cursor.getString(2),
+                revelationType = cursor.getString(3),
+                versesCount = cursor.getInt(4)
+            )
+        }
+        cursor.close()
+        return surah
     }
     
     fun getVersesBySurahId(surahId: Int): List<Verse> {
-        loadData()
-        val surah = cachedSurahs?.find { it.id == surahId } ?: return emptyList()
-        return surah.verses.map { 
-            Verse(
-                surahId = surahId, 
-                verseNumber = it.number, 
-                arabicText = "", 
-                turkmenTranslation = it.text
-            )
+        val verses = mutableListOf<Verse>()
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT id, verseNumber, text, arabicText FROM $TABLE_VERSES WHERE surahId = ? ORDER BY verseNumber", arrayOf(surahId.toString()))
+        
+        if (cursor.moveToFirst()) {
+            do {
+                verses.add(Verse(
+                    surahId = surahId, 
+                    verseNumber = cursor.getInt(1),
+                    turkmenTranslation = cursor.getString(2),
+                    arabicText = cursor.getString(3)
+                ))
+            } while (cursor.moveToNext())
         }
+        cursor.close()
+        return verses
     }
     
     fun searchSurahs(query: String): List<Surah> {
-        loadData()
-        return getAllSurahs().filter { 
-            it.name.contains(query, ignoreCase = true) ||
-            it.arabicName.contains(query) ||
-            it.id.toString().contains(query)
+        val surahs = mutableListOf<Surah>()
+        val db = this.readableDatabase
+        val likeQuery = "%$query%"
+        val cursor = db.rawQuery("SELECT id, name, arabicName, revelationType, versesCount FROM $TABLE_SURAHS WHERE name LIKE ? OR arabicName LIKE ?", arrayOf(likeQuery, likeQuery))
+        
+        if (cursor.moveToFirst()) {
+            do {
+                surahs.add(Surah(
+                    id = cursor.getInt(0),
+                    name = cursor.getString(1),
+                    arabicName = cursor.getString(2),
+                    revelationType = cursor.getString(3),
+                    versesCount = cursor.getInt(4)
+                ))
+            } while (cursor.moveToNext())
         }
+        cursor.close()
+        return surahs
     }
 
     fun getVerseOfTheDay(): Pair<Surah, Verse>? {
-        loadData()
-        val surahs = cachedSurahs ?: return null
-        if (surahs.isEmpty()) return null
-        
-        // Use current date as seed
+        // Same logic: Date based seed, but now SQL random or just deterministic math
         val calendar = java.util.Calendar.getInstance()
         val dayOfYear = calendar.get(java.util.Calendar.DAY_OF_YEAR)
         val year = calendar.get(java.util.Calendar.YEAR)
-        
-        // Simple deterministic random based on date
         val seed = year * 1000 + dayOfYear
         val random = java.util.Random(seed.toLong())
         
-        // Pick a random Surah (weighted by verse count? No, simple random for now)
-        // Check filtering short surahs? Maybe avoid very short ones?
-        // Let's just pick one.
-        val randomSurahIndex = random.nextInt(surahs.size)
-        val splitSurah = surahs[randomSurahIndex]
+        // Count surahs
+        val surahCount = 114 // Known
+        val randomSurahId = random.nextInt(surahCount) + 1
         
-        if (splitSurah.verses.isEmpty()) return null
+        val surah = getSurahById(randomSurahId) ?: return null
         
-        val randomVerseIndex = random.nextInt(splitSurah.verses.size)
-        val verseJson = splitSurah.verses[randomVerseIndex]
+        // Get random verse from this surah
+        // To be deterministic with same seed, we need to know verse count or pick from list
+        // Since we are not caching all verses, let's just fetch count first
         
-        val surah = Surah(splitSurah.id, splitSurah.name, splitSurah.arabicName, splitSurah.revelationType, splitSurah.versesCount)
-        val verse = Verse(splitSurah.id, verseJson.number, "", verseJson.text)
+        val db = this.readableDatabase
+        // Efficient count
+        // Or just fetch all verses for this surah (cheap for one surah)
+        val verses = getVersesBySurahId(randomSurahId)
+        if (verses.isEmpty()) return null
+        
+        val randomVerseIndex = random.nextInt(verses.size)
+        val verse = verses[randomVerseIndex]
         
         return Pair(surah, verse)
     }
