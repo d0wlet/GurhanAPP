@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-@Composable
 fun HomeScreen(
     onSurahClick: (com.gurhan.data.model.Surah) -> Unit,
     onSettingsClick: () -> Unit,
