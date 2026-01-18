@@ -1,7 +1,10 @@
 package com.gurhan.data.repository
 
 import android.content.Context
+import android.util.Log
+import androidx.annotation.Keep
 import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import com.gurhan.data.model.Surah
 import com.gurhan.data.model.Verse
@@ -12,18 +15,20 @@ class QuranRepository(private val context: Context) {
     private var cachedSurahs: List<SurahWithVerses>? = null
     
     // Internal model matching JSON structure
+    @Keep
     private data class SurahWithVerses(
-        val id: Int,
-        val name: String,
-        val arabicName: String,
-        val revelationType: String,
-        val versesCount: Int,
-        val verses: List<VerseJson>
+        @SerializedName("id") val id: Int,
+        @SerializedName("name") val name: String,
+        @SerializedName("arabicName") val arabicName: String,
+        @SerializedName("revelationType") val revelationType: String,
+        @SerializedName("versesCount") val versesCount: Int,
+        @SerializedName("verses") val verses: List<VerseJson>
     )
 
+    @Keep
     private data class VerseJson(
-        val number: Int,
-        val text: String
+        @SerializedName("number") val number: Int,
+        @SerializedName("text") val text: String
     )
 
     private fun loadData() {
@@ -34,8 +39,9 @@ class QuranRepository(private val context: Context) {
             jsonString = context.assets.open("quran_data.json").bufferedReader().use { it.readText() }
             val listType = object : TypeToken<List<SurahWithVerses>>() {}.type
             cachedSurahs = Gson().fromJson(jsonString, listType)
-        } catch (ioException: IOException) {
-            ioException.printStackTrace()
+        } catch (e: Exception) {
+            Log.e("QuranRepository", "Error loading/parsing quran data", e)
+            e.printStackTrace()
             cachedSurahs = emptyList()
         }
     }
