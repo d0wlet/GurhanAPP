@@ -125,8 +125,8 @@ fun SurahDetailScreen(
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .size(32.dp)
-                                    .background(TealPrimary.copy(alpha=0.1f), androidx.compose.foundation.shape.CircleShape),
+                                    .background(TealPrimary.copy(alpha=0.1f), androidx.compose.foundation.shape.RoundedCornerShape(8.dp))
+                                    .padding(horizontal = 8.dp, vertical = 4.dp),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(

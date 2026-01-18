@@ -13,7 +13,7 @@ class QuranRepository(private val context: Context) : SQLiteOpenHelper(context, 
 
     companion object {
         private const val DATABASE_NAME = "quran.db"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
         private const val TABLE_SURAHS = "surahs"
         private const val TABLE_VERSES = "verses"
     }
