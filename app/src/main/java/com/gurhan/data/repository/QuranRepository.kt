@@ -80,4 +80,35 @@ class QuranRepository(private val context: Context) {
             it.id.toString().contains(query)
         }
     }
+
+    fun getVerseOfTheDay(): Pair<Surah, Verse>? {
+        loadData()
+        val surahs = cachedSurahs ?: return null
+        if (surahs.isEmpty()) return null
+        
+        // Use current date as seed
+        val calendar = java.util.Calendar.getInstance()
+        val dayOfYear = calendar.get(java.util.Calendar.DAY_OF_YEAR)
+        val year = calendar.get(java.util.Calendar.YEAR)
+        
+        // Simple deterministic random based on date
+        val seed = year * 1000 + dayOfYear
+        val random = java.util.Random(seed.toLong())
+        
+        // Pick a random Surah (weighted by verse count? No, simple random for now)
+        // Check filtering short surahs? Maybe avoid very short ones?
+        // Let's just pick one.
+        val randomSurahIndex = random.nextInt(surahs.size)
+        val splitSurah = surahs[randomSurahIndex]
+        
+        if (splitSurah.verses.isEmpty()) return null
+        
+        val randomVerseIndex = random.nextInt(splitSurah.verses.size)
+        val verseJson = splitSurah.verses[randomVerseIndex]
+        
+        val surah = Surah(splitSurah.id, splitSurah.name, splitSurah.arabicName, splitSurah.revelationType, splitSurah.versesCount)
+        val verse = Verse(splitSurah.id, verseJson.number, "", verseJson.text)
+        
+        return Pair(surah, verse)
+    }
 }

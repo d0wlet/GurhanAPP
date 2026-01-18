@@ -18,10 +18,15 @@ fun BottomNavigationBar(
     val backStackEntry = navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry.value?.destination?.route
 
-    NavigationBar(
-        containerColor = Color.White,
-        tonalElevation = 8.dp
+    Surface(
+        color = Color.White,
+        shadowElevation = 16.dp,
+        tonalElevation = 0.dp
     ) {
+        NavigationBar(
+            containerColor = Color.White,
+            tonalElevation = 0.dp
+        ) {
         items.forEach { item ->
             val selected = item.route == currentRoute
             NavigationBarItem(

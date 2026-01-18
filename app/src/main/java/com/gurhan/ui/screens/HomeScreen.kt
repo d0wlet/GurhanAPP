@@ -20,13 +20,18 @@ import androidx.compose.ui.platform.LocalContext
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
+@Composable
 fun HomeScreen(
-    onSurahClick: (com.gurhan.data.model.Surah) -> Unit
+    onSurahClick: (com.gurhan.data.model.Surah) -> Unit,
+    onSettingsClick: () -> Unit,
+    onVerseClick: (com.gurhan.data.model.Surah, com.gurhan.data.model.Verse) -> Unit
 ) {
     val context = LocalContext.current
     val repository = remember { QuranRepository(context) }
     var searchQuery by remember { mutableStateOf("") }
     val allSurahs = remember { repository.getAllSurahs() }
+    val verseOfTheDay = remember { repository.getVerseOfTheDay() }
+    
     val filteredSurahs = remember(searchQuery) {
         if (searchQuery.isEmpty()) allSurahs
         else repository.searchSurahs(searchQuery)
@@ -47,7 +52,11 @@ fun HomeScreen(
         ) {
             // Hero Section
             item {
-                HeroSection()
+                HeroSection(
+                    verseOfTheDay = verseOfTheDay,
+                    onSettingsClick = onSettingsClick,
+                    onVerseClick = onVerseClick
+                )
             }
             
             // Search Bar

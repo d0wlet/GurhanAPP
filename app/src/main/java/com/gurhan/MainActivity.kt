@@ -43,9 +43,9 @@ fun MainScreen() {
             icon = Icons.Default.Home
         ),
         BottomNavItem(
-            name = "Sazlamalar",
-            route = "settings",
-            icon = Icons.Default.Settings
+            name = "Bellikler",
+            route = "bookmarks",
+            icon = Icons.Default.Star
         )
     )
 
@@ -72,6 +72,12 @@ fun MainScreen() {
                 HomeScreen(
                     onSurahClick = { surah ->
                         navController.navigate("surah/${surah.id}")
+                    },
+                    onSettingsClick = {
+                        navController.navigate("settings")
+                    },
+                    onVerseClick = { surah, verse ->
+                        navController.navigate("surah/${surah.id}?verseId=${verse.verseNumber}")
                     }
                 )
             }
@@ -79,16 +85,22 @@ fun MainScreen() {
                 SettingsScreen()
             }
             composable(
-                route = "surah/{surahId}",
+                route = "surah/{surahId}?verseId={verseId}",
                 arguments = listOf(
                     androidx.navigation.navArgument("surahId") {
                         type = androidx.navigation.NavType.IntType
+                    },
+                    androidx.navigation.navArgument("verseId") {
+                        type = androidx.navigation.NavType.IntType
+                        defaultValue = -1
                     }
                 )
             ) { backStackEntry ->
                 val surahId = backStackEntry.arguments?.getInt("surahId") ?: return@composable
+                val verseId = backStackEntry.arguments?.getInt("verseId") ?: -1
                 SurahDetailScreen(
                     surahId = surahId,
+                    initialVerseId = verseId,
                     onBackClick = { navController.popBackStack() }
                 )
             }

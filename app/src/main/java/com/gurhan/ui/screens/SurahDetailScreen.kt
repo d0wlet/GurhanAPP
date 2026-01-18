@@ -24,12 +24,26 @@ import androidx.compose.ui.platform.LocalContext
 @Composable
 fun SurahDetailScreen(
     surahId: Int,
+    initialVerseId: Int = -1,
     onBackClick: () -> Unit
 ) {
     val context = LocalContext.current
     val repository = remember { QuranRepository(context) }
     val surah = remember(surahId) { repository.getSurahById(surahId) }
     val verses = remember(surahId) { repository.getVersesBySurahId(surahId) }
+    
+    val listState = androidx.compose.foundation.lazy.rememberLazyListState()
+    
+    // Scroll to verse if deep linked
+    androidx.compose.runtime.LaunchedEffect(initialVerseId, verses) {
+        if (initialVerseId != -1 && verses.isNotEmpty()) {
+            val index = verses.indexOfFirst { it.verseNumber == initialVerseId }
+            if (index != -1) {
+                // Add 1 for the Header item
+                listState.scrollToItem(index + 1)
+            }
+        }
+    }
 
     if (surah == null) return
 
@@ -51,6 +65,7 @@ fun SurahDetailScreen(
         }
     ) { paddingValues ->
         LazyColumn(
+            state = listState,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
