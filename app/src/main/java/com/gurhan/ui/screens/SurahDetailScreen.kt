@@ -18,13 +18,16 @@ import androidx.compose.ui.unit.sp
 import com.gurhan.data.repository.QuranRepository
 import com.gurhan.ui.theme.TealPrimary
 
+import androidx.compose.ui.platform.LocalContext
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SurahDetailScreen(
     surahId: Int,
     onBackClick: () -> Unit
 ) {
-    val repository = remember { QuranRepository() }
+    val context = LocalContext.current
+    val repository = remember { QuranRepository(context) }
     val surah = remember(surahId) { repository.getSurahById(surahId) }
     val verses = remember(surahId) { repository.getVersesBySurahId(surahId) }
 

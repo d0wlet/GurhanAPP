@@ -16,12 +16,15 @@ import com.gurhan.ui.components.SurahCard
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 
+import androidx.compose.ui.platform.LocalContext
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     onSurahClick: (com.gurhan.data.model.Surah) -> Unit
 ) {
-    val repository = remember { QuranRepository() }
+    val context = LocalContext.current
+    val repository = remember { QuranRepository(context) }
     var searchQuery by remember { mutableStateOf("") }
     val allSurahs = remember { repository.getAllSurahs() }
     val filteredSurahs = remember(searchQuery) {
