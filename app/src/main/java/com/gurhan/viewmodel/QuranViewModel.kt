@@ -1,10 +1,16 @@
+package com.gurhan.viewmodel
+
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.gurhan.data.repository.QuranRepository
+import com.gurhan.data.model.Surah
+import com.gurhan.data.model.Verse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
-import com.gurhan.data.model.Verse
 
 class QuranViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = QuranRepository(application)

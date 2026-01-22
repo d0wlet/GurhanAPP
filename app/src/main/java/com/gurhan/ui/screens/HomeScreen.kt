@@ -21,8 +21,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.foundation.shape.RoundedCornerShape
-import com.gurhan.ui.theme.BackgroundCream
+import com.gurhan.ui.theme.*
 import com.gurhan.viewmodel.QuranViewModel
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 
 @Composable
 fun HomeScreen(
@@ -116,9 +118,9 @@ fun HomeScreen(
                     placeholder = { Text("Sure gözle...") },
                     leadingIcon = { 
                         androidx.compose.material3.Icon(
-                            imageVector = androidx.compose.material.icons.filled.Search, 
+                            imageVector = Icons.Default.Search, 
                             contentDescription = "Search",
-                            tint = com.gurhan.ui.theme.TextSecondary
+                            tint = TextSecondary
                         )
                     },
                     shape = RoundedCornerShape(12.dp),
