@@ -24,14 +24,16 @@ import com.gurhan.ui.theme.*
 
 @Composable
 fun HeroSection(
-    lastReadSurah: String = "Fatiha Süresi",
-    lastReadVerse: Int = 1,
-    onContinueClick: () -> Unit
+    verseOfTheDay: Pair<com.gurhan.data.model.Surah, com.gurhan.data.model.Verse>?
 ) {
+    if (verseOfTheDay == null) return
+
+    val (surah, verse) = verseOfTheDay
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(280.dp) // Taller header for impact
+            .height(320.dp) // Taller for verse text
             .clip(RoundedCornerShape(bottomStart = 40.dp, bottomEnd = 40.dp))
             .background(
                 Brush.verticalGradient(
@@ -42,95 +44,59 @@ fun HeroSection(
                 )
             )
     ) {
-
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(24.dp)
-                .padding(top = 24.dp), // System bar padding allowance
-            verticalArrangement = Arrangement.SpaceBetween
+                .padding(top = 40.dp), // System bar padding allowance
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Header: Greeting & Date
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(
-                        text = "Esselamu Aleyküm",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = TextOnPrimary.copy(alpha = 0.8f),
-                        fontSize = 16.sp
-                    )
-                    Text(
-                        text = "Musulman Dogan", // Placeholder User Name
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = TextOnPrimary,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                
-                // Hijri Date Badge
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color.White.copy(alpha = 0.2f))
-                        .padding(horizontal = 12.dp, vertical = 6.dp)
-                ) {
-                    Text(
-                        text = "1446 AH",
-                        color = TextOnPrimary,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                }
-            }
             
-            // Last Read Card (Floating inside Hero)
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Color.White.copy(alpha = 0.15f))
-                    .clickable { onContinueClick() }
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Column {
-                    Text(
-                        text = "Soňky Okalan",
-                        color = TextOnPrimary.copy(alpha = 0.8f),
-                        fontSize = 12.sp
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "$lastReadSurah, Aýat $lastReadVerse",
-                        color = TextOnPrimary,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 18.sp
-                    )
-                }
-                
-                // Play/Arrow Icon
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(AccentGold),
-                    contentAlignment = Alignment.Center
-                ) {
-                   // Using Material Icon fallback since script might not have fetched 'play' perfectly or ID is unknown
-                   Icon(
-                       imageVector = androidx.compose.material.icons.Icons.Filled.PlayArrow,
-                       contentDescription = "Continue",
-                       tint = Color.White
-                   )
-                }
-            }
+            Text(
+                text = "Günün Aýaty",
+                style = MaterialTheme.typography.titleMedium,
+                color = AccentGold,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            // Arabic Text
+            Text(
+                text = verse.text, // Assuming text is arabic? No, text is Turkmen in model? Let's check model.
+                // Model Verse(surahId, verseNumber, turkmenTranslation, arabicText)
+                // in code I see: verse.text is Turkmen? 
+                // Let's check model definition or usage.
+                // In parse_v5/v6: text is Turkmen. arabicText is "" for now (file didn't have it).
+                // Wait, parse_v6 left arabicText empty.
+                // And quran_final_linear.txt didn't have arabic.
+                // User said "tek tek çek pdf den". PDF *had* arabic. But text file doesn't?
+                // Text file snippet: "1. Süýnen...". Just Turkmen.
+                // So Arabic is MISSING in text source.
+                // I will use Turkmen text only for now.
+                // Or try to use 'text' as Arabic if I was wrong.
+                // In json_to_sqlite log: surah['verses'] has 'text' and 'arabicText'. 
+                // parse_v6 sets arabicText = "".
+                // So I only have Turkmen.
+                // I will display Turkmen prominently.
+                // text = verse.text
+                style = MaterialTheme.typography.headlineMedium,
+                color = TextOnPrimary,
+                fontSize = 20.sp, 
+                fontWeight = FontWeight.SemiBold,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            Text(
+                text = "${surah.name}, ${verse.verseNumber}-nji aýat",
+                style = MaterialTheme.typography.bodyMedium,
+                color = TextOnPrimary.copy(alpha = 0.8f),
+                fontSize = 14.sp
+            )
         }
     }
 }

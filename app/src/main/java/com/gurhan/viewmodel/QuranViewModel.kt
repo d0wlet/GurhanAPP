@@ -1,14 +1,10 @@
-package com.gurhan.viewmodel
-
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
-import com.gurhan.data.model.Surah
 import com.gurhan.data.repository.QuranRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import com.gurhan.data.model.Verse
 
 class QuranViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = QuranRepository(application)
@@ -32,9 +28,21 @@ class QuranViewModel(application: Application) : AndroidViewModel(application) {
     private val _lastReadSurahId = MutableStateFlow(preferenceManager.getLastReadSurahId())
     val lastReadSurahId: StateFlow<Int> = _lastReadSurahId.asStateFlow()
     
+    // Verse of the Day
+    private val _verseOfTheDay = MutableStateFlow<Pair<Surah, Verse>?>(null)
+    val verseOfTheDay: StateFlow<Pair<Surah, Verse>?> = _verseOfTheDay.asStateFlow()
+    
     init {
         loadSurahs()
         refreshLastRead()
+        item_verse_of_the_day()
+    }
+    
+    private fun item_verse_of_the_day() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val vod = repository.getVerseOfTheDay()
+            _verseOfTheDay.value = vod
+        }
     }
     
     fun refreshLastRead() {

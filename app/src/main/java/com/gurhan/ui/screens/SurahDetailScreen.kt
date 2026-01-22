@@ -115,55 +115,37 @@ fun SurahDetailScreen(
                 }
             }
 
-            // Verses
+            // Verses (Book Mode)
             items(verses) { verse ->
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                    shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp) // Minimal spacing
                 ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .background(PrimaryGreen.copy(alpha=0.1f), androidx.compose.foundation.shape.RoundedCornerShape(8.dp))
-                                    .padding(horizontal = 8.dp, vertical = 4.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = "${surah.id}:${verse.verseNumber}",
-                                    color = PrimaryGreen,
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-                        
-                        Text(
-                            text = verse.arabicText,
-                            fontSize = 24.sp,
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = androidx.compose.ui.text.style.TextAlign.End,
-                            lineHeight = 36.sp
+                    // Verse Number & Text inline for flow, or slight separation
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                         Text(
+                            text = "${verse.verseNumber}. ${verse.turkmenTranslation}",
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 18.sp,
+                            lineHeight = 28.sp,
+                            color = Color.Black.copy(alpha = 0.87f)
                         )
-                        
-                        Divider(color = Color.LightGray.copy(alpha=0.3f))
-                        
-                        Text(
-                            text = verse.turkmenTranslation,
-                            fontSize = 16.sp,
-                            color = Color.DarkGray,
-                            lineHeight = 24.sp
+                    }
+                    
+                    // If Arabic text exists (future proofing), show it
+                    if (verse.arabicText.isNotBlank()) {
+                         Text(
+                            text = verse.arabicText,
+                            style = MaterialTheme.typography.headlineMedium,
+                            fontSize = 24.sp,
+                            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                            textAlign = androidx.compose.ui.text.style.TextAlign.End
                         )
                     }
                 }
+                // Optional: Thin separator
+                Divider(color = Color.LightGray.copy(alpha = 0.2f), thickness = 0.5.dp)
             }
         }
     }

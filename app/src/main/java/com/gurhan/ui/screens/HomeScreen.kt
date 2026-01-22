@@ -16,6 +16,11 @@ import com.gurhan.data.model.Surah
 import com.gurhan.data.model.Verse
 import com.gurhan.ui.components.HeroSection
 import com.gurhan.ui.components.SurahCard
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.draw.shadow
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.foundation.shape.RoundedCornerShape
 import com.gurhan.ui.theme.BackgroundCream
 import com.gurhan.viewmodel.QuranViewModel
 
@@ -28,50 +33,74 @@ fun HomeScreen(
 ) {
     val surahs by viewModel.surahs.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
-    
-    // Last Read State
-    val lastReadSurah by viewModel.lastReadSurah.collectAsState()
-    val lastReadVerse by viewModel.lastReadVerse.collectAsState()
-    val lastReadSurahId by viewModel.lastReadSurahId.collectAsState()
+    val verseOfTheDay by viewModel.verseOfTheDay.collectAsState()
     
     // Search State
     var searchQuery by remember { mutableStateOf("") }
+    
+    // Parallax Scroll State
+    val listState = androidx.compose.foundation.lazy.rememberLazyListState()
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackgroundCream) // Global background color
+            .background(BackgroundCream)
     ) {
-        // Scrollable Content
+    
+        // Parallax Header (Behind List)
+        // We use derivedStateOf to avoid recomposition on every pixel scroll if possible, or just standard state
+        val headerHeight = 320.dp
+        val headerHeightPx = with(androidx.compose.ui.platform.LocalDensity.current) { headerHeight.toPx() }
+        
+        // Parallax Logic: Move up at half speed, fade out
+        // Only visible if first item is visible (or offset < height)
+        val firstItemTranslationY by remember {
+            derivedStateOf {
+                if (listState.firstVisibleItemIndex == 0) {
+                    listState.firstVisibleItemScrollOffset * 0.5f // Parallax factor
+                } else {
+                    0f // Hidden
+                }
+            }
+        }
+        
+        val headerAlpha by remember {
+            derivedStateOf {
+                 if (listState.firstVisibleItemIndex == 0) {
+                    // Fade out as we scroll
+                    val progress = listState.firstVisibleItemScrollOffset / headerHeightPx
+                    (1f - progress * 1.5f).coerceIn(0f, 1f)
+                } else {
+                    0f
+                }
+            }
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(headerHeight)
+                .graphicsLayer {
+                    alpha = headerAlpha
+                    translationY = -firstItemTranslationY
+                }
+                .align(Alignment.TopCenter) // Make sure it stays top
+        ) {
+            HeroSection(verseOfTheDay)
+        }
+
+        // Foreground List
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 100.dp) // Space for floating bottom bar
+            state = listState,
+            contentPadding = PaddingValues(bottom = 100.dp)
         ) {
-            // Hero Section item
+             // Spacer for Header Visibility
             item {
-                HeroSection(
-                    lastReadSurah = lastReadSurah,
-                    lastReadVerse = lastReadVerse,
-                    onContinueClick = {
-                        // Resume reading: Navigate to last read Surah
-                         // We need a way to navigate to specific verse, but for now just open the Surah
-                         // Assuming we can pass surahId
-                         // We need onSurahClick logic but for specific ID
-                         // But onVerseClick signature is (Surah, Verse).
-                         // Let's just use onSurahClick with a recreated Surah object or fetch it.
-                         // Or better, expose onContinueClick to navigate using ID.
-                         // Since navigation logic is in MainScreen usually, HomeScreen just calls callback.
-                         // But callback is (Surah)->Unit.
-                         // We can search surah from list?
-                        val surah = surahs.find { it.id == lastReadSurahId } ?: surahs.firstOrNull()
-                        if (surah != null) {
-                            onSurahClick(surah)
-                        }
-                    }
-                )
+                Spacer(modifier = Modifier.height(headerHeight - 20.dp)) // Slight overlap
             }
             
-            // Search Bar
+            // Search Bar (Sticky-ish manually)
             item {
                 androidx.compose.material3.OutlinedTextField(
                     value = searchQuery,
@@ -82,16 +111,17 @@ fun HomeScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp)
-                        .padding(bottom = 16.dp),
+                        .padding(bottom = 16.dp)
+                        .shadow(8.dp, RoundedCornerShape(12.dp)), // Elevation for floating feel
                     placeholder = { Text("Sure gözle...") },
                     leadingIcon = { 
                         androidx.compose.material3.Icon(
-                            imageVector = androidx.compose.material.icons.Icons.Default.Search, 
+                            imageVector = androidx.compose.material.icons.filled.Search, 
                             contentDescription = "Search",
                             tint = com.gurhan.ui.theme.TextSecondary
                         )
                     },
-                    shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(12.dp),
                     colors = androidx.compose.material3.TextFieldDefaults.colors(
                         focusedContainerColor = androidx.compose.ui.graphics.Color.White,
                         unfocusedContainerColor = androidx.compose.ui.graphics.Color.White,
@@ -101,6 +131,8 @@ fun HomeScreen(
                     singleLine = true
                 )
             }
+            
+            // Surah List logic...
             
             // Surah List
             if (isLoading) {
