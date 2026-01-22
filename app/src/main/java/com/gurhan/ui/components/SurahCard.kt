@@ -23,6 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gurhan.data.model.Surah
 import com.gurhan.ui.animations.AnimationSpecs
+import com.gurhan.ui.theme.TealPrimary
+import com.gurhan.ui.theme.TextSecondary
+import com.gurhan.ui.theme.DividerColor
 
 @Composable
 fun SurahCard(
@@ -117,7 +120,14 @@ fun SurahCard(
                         
                         Box(
                             modifier = Modifier
-                            fontSize = 11.sp,
+                                .size(3.dp)
+                                .clip(CircleShape)
+                                .background(TextSecondary)
+                        )
+
+                        Text(
+                            text = "${surah.versesCount} Aýat", 
+                            fontSize = 13.sp,
                             color = TextSecondary,
                             fontWeight = FontWeight.Medium,
                             letterSpacing = 0.5.sp
