@@ -1,31 +1,25 @@
 package com.gurhan.ui.components
 
-import android.view.HapticFeedbackConstants
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gurhan.data.model.Surah
-import com.gurhan.ui.animations.AnimationSpecs
-import com.gurhan.ui.theme.TealPrimary
-import com.gurhan.ui.theme.TextSecondary
-import com.gurhan.ui.theme.DividerColor
+import com.gurhan.ui.theme.*
 
 @Composable
 fun SurahCard(
@@ -33,124 +27,107 @@ fun SurahCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val view = LocalView.current
-    val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
-    
-    // Smooth scale animation
-    val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.96f else 1f,
-        animationSpec = AnimationSpecs.fastSpring(),
-        label = "cardScale"
-    )
-    
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .scale(scale)
-            .padding(vertical = 4.dp),
-        shape = RoundedCornerShape(20.dp),
-        color = Color.White,
-        shadowElevation = 4.dp,
-        tonalElevation = 0.dp
+            .padding(horizontal = 16.dp, vertical = 6.dp)
+            .shadow(
+                elevation = 8.dp,
+                shape = RoundedCornerShape(24.dp),
+                spotColor = Color.Black.copy(alpha = 0.08f)
+            )
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(24.dp),
+        color = SurfaceWhite
     ) {
         Row(
             modifier = Modifier
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = androidx.compose.material.ripple.rememberRipple(
-                        color = Color(0xFF0D9488)
-                    )
-                ) {
-                    view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-                    onClick()
-                }
-                .padding(16.dp),
+                .padding(20.dp)
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.weight(1f)
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Number badge with gradient
+                // Number Badge
                 Box(
+                    contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .size(48.dp)
-                        .clip(RoundedCornerShape(14.dp))
+                        .size(46.dp)
+                        .clip(CircleShape)
                         .background(
                             Brush.linearGradient(
-                                colors = listOf(
-                                    Color(0xFF0D9488).copy(alpha = 0.1f),
-                                    Color(0xFF14B8A6).copy(alpha = 0.15f)
-                                )
+                                colors = listOf(PrimaryGreen.copy(alpha = 0.1f), PrimaryGreen.copy(alpha = 0.2f))
                             )
-                        ),
-                    contentAlignment = Alignment.Center
+                        )
                 ) {
                     Text(
                         text = surah.id.toString(),
-                        fontSize = 18.sp,
+                        color = PrimaryGreen,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF0D9488)
+                        fontSize = 16.sp,
+                        fontFamily = MaterialTheme.typography.titleMedium.fontFamily
                     )
                 }
-                
-                // Surah info
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
+
+                // Text Info
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(
                         text = surah.name,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF0F172A)
+                        style = MaterialTheme.typography.titleMedium,
+                        color = TextPrimary,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 17.sp
                     )
                     
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         Text(
-                            text = surah.revelationType,
-                            fontSize = 13.sp,
-                            color = Color(0xFF64748B)
+                            text = surah.revelationType, // Mekke/Medine
+                            style = MaterialTheme.typography.bodySmall,
+                            color = TextSecondary,
+                            fontSize = 13.sp
                         )
                         
                         Box(
                             modifier = Modifier
-                                .size(3.dp)
+                                .size(4.dp)
                                 .clip(CircleShape)
-                                .background(TextSecondary)
+                                .background(AccentGold)
                         )
-
+                        
                         Text(
-                            text = "${surah.versesCount} Aýat", 
-                            fontSize = 13.sp,
+                            text = "${surah.versesCount} Ayat",
+                            style = MaterialTheme.typography.bodySmall,
                             color = TextSecondary,
-                            fontWeight = FontWeight.Medium,
-                            letterSpacing = 0.5.sp
+                            fontSize = 13.sp
                         )
                     }
                 }
             }
-            
-            // Arabic Name (Calligraphic)
+
+            // Arabic Name
             Text(
                 text = surah.arabicName,
-                fontSize = 22.sp,
-                color = TealPrimary, // Branding touch
+                style = MaterialTheme.typography.headlineSmall, // Should use Arabic font if possible
+                color = PrimaryGreen,
+                fontSize = 24.sp,
                 fontWeight = FontWeight.Normal,
-                fontFamily = androidx.compose.ui.text.font.FontFamily.Serif // More traditional feel for Arabic
+                textAlign = TextAlign.End
             )
         }
-        
-        // Essential iOS element: The Divider
-        Divider(
-            modifier = Modifier.padding(start = 64.dp), // Indented divider
-            color = DividerColor,
-            thickness = 0.5.dp
-        )
     }
 }
+
+// Helper extension for shadows since modifier.shadow doesn't always support spotColor on older Compose versions directly without custom modifier, 
+// using standard modifier.shadow here but ideally we'd use a custom modifier for colored shadows.
+// Standard shadow is fine for now.
+fun Modifier.shadow(
+    elevation: androidx.compose.ui.unit.Dp,
+    shape: androidx.compose.ui.graphics.Shape,
+    spotColor: Color
+) = this.shadow(elevation, shape, spotColor = spotColor)

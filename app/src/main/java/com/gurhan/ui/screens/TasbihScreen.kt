@@ -1,325 +1,178 @@
 package com.gurhan.ui.screens
 
 import android.view.HapticFeedbackConstants
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gurhan.ui.animations.AnimationSpecs
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.gurhan.ui.theme.*
+import kotlin.math.min
 
-/**
- * Tasbih (Prayer Counter) Screen
- * Beautiful, interactive counter with haptic feedback and animations
- */
 @Composable
 fun TasbihScreen() {
     var count by remember { mutableStateOf(0) }
-    var targetCount by remember { mutableStateOf(33) }
-    var isPressed by remember { mutableStateOf(false) }
+    var target by remember { mutableStateOf(33) }
     
-    val haptic = LocalHapticFeedback.current
     val view = LocalView.current
-    val scope = rememberCoroutineScope()
     
-    // Animation for press effect
-    val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.92f else 1f,
-        animationSpec = AnimationSpecs.fastSpring(),
-        label = "scale"
-    )
-    
-    // Ripple animation
-    var rippleAlpha by remember { mutableStateOf(0f) }
-    val rippleAnimatable = remember { Animatable(0f) }
-    
-    // Progress animation
-    val progress by animateFloatAsState(
-        targetValue = (count.toFloat() / targetCount.toFloat()).coerceIn(0f, 1f),
-        animationSpec = AnimationSpecs.smoothSpring(),
-        label = "progress"
-    )
-    
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFFF0FDFA),
-                        Color(0xFFCCFBF1)
-                    )
-                )
-            )
+            .background(BackgroundCream)
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+        Text(
+            text = "SubhanAllah",
+            style = MaterialTheme.typography.headlineLarge,
+            color = PrimaryGreenDark,
+            fontWeight = FontWeight.Bold
+        )
+        
+        Spacer(modifier = Modifier.height(48.dp))
+        
+        // Main Counter Button
+        TASBIHButton(
+            count = count,
+            target = target,
+            onClick = {
+                count++
+                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                if (count >= target) {
+                     // Vibration for completion could go here
+                }
+            }
+        )
+        
+        Spacer(modifier = Modifier.height(48.dp))
+        
+        // Controls
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            // Header
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = 32.dp)
-            ) {
-                Text(
-                    text = "Tesbih",
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF0D9488)
-                )
-                
-                Spacer(modifier = Modifier.height(8.dp))
-                
-                Text(
-                    text = "Subhanallah • Alhamdulillah • Allahu Akbar",
-                    fontSize = 14.sp,
-                    color = Color(0xFF64748B),
-                    textAlign = TextAlign.Center
-                )
-            }
-            
-            // Counter Circle
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 48.dp)
-            ) {
-                // Progress ring
-                Canvas(
-                    modifier = Modifier.size(280.dp)
-                ) {
-                    val strokeWidth = 12.dp.toPx()
-                    val radius = (size.minDimension - strokeWidth) / 2
-                    val center = Offset(size.width / 2, size.height / 2)
-                    
-                    // Background ring
-                    drawCircle(
-                        color = Color(0xFFE0F2FE),
-                        radius = radius,
-                        center = center,
-                        style = Stroke(width = strokeWidth)
-                    )
-                    
-                    // Progress ring
-                    drawArc(
-                        brush = Brush.sweepGradient(
-                            colors = listOf(
-                                Color(0xFF0D9488),
-                                Color(0xFF14B8A6),
-                                Color(0xFF2DD4BF)
-                            )
-                        ),
-                        startAngle = -90f,
-                        sweepAngle = 360f * progress,
-                        useCenter = false,
-                        style = Stroke(width = strokeWidth),
-                        topLeft = Offset(strokeWidth / 2, strokeWidth / 2),
-                        size = androidx.compose.ui.geometry.Size(
-                            size.width - strokeWidth,
-                            size.height - strokeWidth
-                        )
-                    )
-                    
-                    // Ripple effect
-                    if (rippleAlpha > 0f) {
-                        drawCircle(
-                            color = Color(0xFF0D9488).copy(alpha = rippleAlpha),
-                            radius = radius * rippleAnimatable.value,
-                            center = center,
-                            style = Stroke(width = strokeWidth * (1 - rippleAnimatable.value))
-                        )
-                    }
-                }
-                
-                // Counter button
-                Surface(
-                    modifier = Modifier
-                        .size(240.dp)
-                        .scale(scale)
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onPress = {
-                                    isPressed = true
-                                    
-                                    // Haptic feedback
-                                    view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-                                    
-                                    // Ripple animation
-                                    scope.launch {
-                                        rippleAlpha = 0.5f
-                                        rippleAnimatable.snapTo(0f)
-                                        launch {
-                                            rippleAnimatable.animateTo(
-                                                1.5f,
-                                                animationSpec = tween(600, easing = FastOutSlowInEasing)
-                                            )
-                                        }
-                                        launch {
-                                            for (i in 0..20) {
-                                                delay(30)
-                                                rippleAlpha *= 0.9f
-                                            }
-                                            rippleAlpha = 0f
-                                        }
-                                    }
-                                    
-                                    tryAwaitRelease()
-                                    isPressed = false
-                                },
-                                onTap = {
-                                    if (count < targetCount) {
-                                        count++
-                                        
-                                        // Special haptic for milestones
-                                        if (count == targetCount) {
-                                            view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                                        }
-                                    } else {
-                                        // Reached target, vibrate
-                                        view.performHapticFeedback(HapticFeedbackConstants.REJECT)
-                                    }
-                                }
-                            )
-                        },
-                    shape = CircleShape,
-                    color = Color.White,
-                    shadowElevation = 16.dp
-                ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Text(
-                                text = count.toString(),
-                                fontSize = 72.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFF0D9488)
-                            )
-                            
-                            Text(
-                                text = "/ $targetCount",
-                                fontSize = 20.sp,
-                                color = Color(0xFF94A3B8)
-                            )
-                            
-                            if (count >= targetCount) {
-                                Text(
-                                    text = "✓ Tamamlandı",
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = Color(0xFF10B981)
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-            
-            // Controls
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.padding(bottom = 32.dp)
-            ) {
-                // Target selector
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    listOf(33, 99, 100).forEach { target ->
-                        Surface(
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(56.dp),
-                            shape = RoundedCornerShape(16.dp),
-                            color = if (targetCount == target) Color(0xFF0D9488) else Color.White,
-                            shadowElevation = if (targetCount == target) 8.dp else 2.dp,
-                            onClick = {
-                                targetCount = target
-                                if (count > target) count = 0
-                                view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-                            }
-                        ) {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                Text(
-                                    text = target.toString(),
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = if (targetCount == target) Color.White else Color(0xFF64748B)
-                                )
-                            }
-                        }
-                    }
-                }
-                
-                // Reset button
-                Button(
-                    onClick = {
-                        count = 0
-                        view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.White,
-                        contentColor = Color(0xFF0D9488)
-                    ),
-                    elevation = ButtonDefaults.buttonElevation(
-                        defaultElevation = 2.dp,
-                        pressedElevation = 8.dp
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Refresh,
-                        contentDescription = "Reset",
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "Täzeden Başla",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                }
-            }
+            ControlChip(text = "Reset", onClick = { count = 0 })
+            ControlChip(text = "33", isSelected = target == 33, onClick = { target = 33 })
+            ControlChip(text = "99", isSelected = target == 99, onClick = { target = 99 })
         }
+    }
+}
+
+@Composable
+fun TASBIHButton(
+    count: Int,
+    target: Int,
+    onClick: () -> Unit
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.95f else 1f,
+        animationSpec = tween(100), label = "buttonScale"
+    )
+    
+    val progress = min(count.toFloat() / target.toFloat(), 1f)
+    val animatedProgress by animateFloatAsState(
+        targetValue = progress,
+        animationSpec = tween(500), label = "progress"
+    )
+
+    Box(
+        modifier = Modifier
+            .size(280.dp)
+            .scale(scale)
+            .shadow(20.dp, CircleShape, spotColor = PrimaryGreen.copy(alpha = 0.3f))
+            .clip(CircleShape)
+            .background(SurfaceWhite)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) { onClick() },
+        contentAlignment = Alignment.Center
+    ) {
+        // Progress Arc
+        Canvas(modifier = Modifier.fillMaxSize().padding(10.dp)) {
+            drawArc(
+                color = DividerColor,
+                startAngle = 0f,
+                sweepAngle = 360f,
+                useCenter = false,
+                style = Stroke(width = 20.dp.toPx(), cap = StrokeCap.Round)
+            )
+            
+            drawArc(
+                brush = Brush.sweepGradient(
+                    colors = listOf(PrimaryGreenLight, PrimaryGreen, PrimaryGreenDark, PrimaryGreenLight)
+                ),
+                startAngle = -90f,
+                sweepAngle = animatedProgress * 360f,
+                useCenter = false,
+                style = Stroke(width = 20.dp.toPx(), cap = StrokeCap.Round)
+            )
+        }
+        
+        // Inner Circle & Text
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = count.toString(),
+                fontSize = 64.sp,
+                fontWeight = FontWeight.Bold,
+                color = PrimaryGreenDark
+            )
+            Text(
+                text = "/ $target",
+                fontSize = 20.sp,
+                color = TextSecondary
+            )
+        }
+    }
+}
+
+@Composable
+fun ControlChip(
+    text: String,
+    isSelected: Boolean = false,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .background(if (isSelected) PrimaryGreen else Color.White)
+            .clickable { onClick() }
+            .padding(horizontal = 24.dp, vertical = 12.dp)
+    ) {
+        Text(
+            text = text,
+            color = if (isSelected) Color.White else TextSecondary,
+            fontWeight = FontWeight.Medium
+        )
     }
 }

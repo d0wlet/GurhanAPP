@@ -1,228 +1,150 @@
 package com.gurhan.ui.components
 
-import android.view.HapticFeedbackConstants
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gurhan.data.model.Surah
-import com.gurhan.data.model.Verse
-import com.gurhan.ui.animations.AnimationSpecs
-import com.gurhan.ui.icons.CustomIcons
+import com.gurhan.R
+import com.gurhan.ui.theme.*
 
-/**
- * Modern Hero Section with animated gradient and verse of the day
- */
 @Composable
 fun HeroSection(
-    verseOfTheDay: Pair<Surah, Verse>?,
-    onSettingsClick: () -> Unit,
-    onVerseClick: (Surah, Verse) -> Unit
+    lastReadSurah: String = "Fatiha Süresi",
+    lastReadVerse: Int = 1,
+    onContinueClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .height(280.dp) // Taller header for impact
+            .clip(RoundedCornerShape(bottomStart = 40.dp, bottomEnd = 40.dp))
             .background(
-                brush = Brush.verticalGradient(
+                Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF0D9488),
-                        Color(0xFF14B8A6),
-                        Color(0xFF2DD4BF)
+                        PrimaryGreenDark,
+                        PrimaryGreen
                     )
-                ),
-                shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp)
-            )
-            .padding(24.dp)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
-            // Header Row
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Date badge with glassmorphic effect
-                Surface(
-                    shape = RoundedCornerShape(24.dp),
-                    color = Color.White.copy(alpha = 0.25f)
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.DateRange,
-                            contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Text(
-                            text = "Günün Aýaty",
-                            color = Color.White,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
-                }
-                
-                // Settings button
-                val view = LocalView.current
-                IconButton(
-                    onClick = {
-                        view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-                        onSettingsClick()
-                    }
-                ) {
-                    Icon(
-                        imageVector = CustomIcons.Settings,
-                        contentDescription = "Sazlamalar",
-                        tint = Color.White,
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
-            }
-            
-            // Verse of the Day Card
-            if (verseOfTheDay != null) {
-                val (surah, verse) = verseOfTheDay
-                VerseCard(
-                    surah = surah,
-                    verse = verse,
-                    onClick = { onVerseClick(surah, verse) }
                 )
-            }
-        }
-    }
-}
-
-@Composable
-private fun VerseCard(
-    surah: Surah,
-    verse: Verse,
-    onClick: () -> Unit
-) {
-    val view = LocalView.current
-    val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
-    
-    val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.97f else 1f,
-        animationSpec = AnimationSpecs.fastSpring(),
-        label = "verseCardScale"
-    )
-    
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .scale(scale),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            )
     ) {
+        // Decorative circles for background pattern sensation
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .offset(x = 60.dp, y = (-40).dp)
+                .size(200.dp)
+                .clip(CircleShape)
+                .background(Color.White.copy(alpha = 0.05f))
+        )
+        
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .offset(x = (-40).dp, y = 40.dp)
+                .size(150.dp)
+                .clip(CircleShape)
+                .background(Color.White.copy(alpha = 0.05f))
+        )
+
         Column(
             modifier = Modifier
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = androidx.compose.material.ripple.rememberRipple()
-                ) {
-                    view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-                    onClick()
-                }
-                .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .fillMaxSize()
+                .padding(24.dp)
+                .padding(top = 24.dp), // System bar padding allowance
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Header
+            // Header: Greeting & Date
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = CustomIcons.Quran,
-                        contentDescription = null,
-                        tint = Color(0xFF0D9488),
-                        modifier = Modifier.size(20.dp)
+                Column {
+                    Text(
+                        text = "Esselamu Aleyküm",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = TextOnPrimary.copy(alpha = 0.8f),
+                        fontSize = 16.sp
                     )
                     Text(
-                        text = "GÜNÜN AÝATY",
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF0D9488),
-                        letterSpacing = 1.2.sp
+                        text = "Musulman Dogan", // Placeholder User Name
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = TextOnPrimary,
+                        fontWeight = FontWeight.Bold
                     )
                 }
                 
-                Text(
-                    text = "${surah.name} ${verse.verseNumber}",
-                    fontSize = 12.sp,
-                    color = Color(0xFF64748B),
-                    fontWeight = FontWeight.Medium
-                )
-            }
-            
-            // Arabic text (if available)
-            if (verse.arabicText.isNotBlank()) {
-                Text(
-                    text = verse.arabicText,
-                    fontSize = 22.sp,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = androidx.compose.ui.text.style.TextAlign.End,
-                    lineHeight = 36.sp,
-                    color = Color(0xFF0F172A),
-                    fontFamily = androidx.compose.ui.text.font.FontFamily.Serif
-                )
-            }
-            
-            // Translation
-            Text(
-                text = verse.turkmenTranslation,
-                fontSize = 15.sp,
-                color = Color(0xFF475569),
-                lineHeight = 24.sp,
-                maxLines = 4,
-                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
-            )
-            
-            // Read more button
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                color = Color(0xFF0D9488).copy(alpha = 0.1f)
-            ) {
+                // Hijri Date Badge
                 Box(
-                    modifier = Modifier.padding(vertical = 12.dp),
-                    contentAlignment = Alignment.Center
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color.White.copy(alpha = 0.2f))
+                        .padding(horizontal = 12.dp, vertical = 6.dp)
                 ) {
                     Text(
-                        text = "Doly Oka →",
-                        color = Color(0xFF0D9488),
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 15.sp
+                        text = "1446 AH",
+                        color = TextOnPrimary,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
                     )
+                }
+            }
+            
+            // Last Read Card (Floating inside Hero)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(Color.White.copy(alpha = 0.15f))
+                    .clickable { onContinueClick() }
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column {
+                    Text(
+                        text = "Soňky Okalan",
+                        color = TextOnPrimary.copy(alpha = 0.8f),
+                        fontSize = 12.sp
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "$lastReadSurah, Aýat $lastReadVerse",
+                        color = TextOnPrimary,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 18.sp
+                    )
+                }
+                
+                // Play/Arrow Icon
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(AccentGold),
+                    contentAlignment = Alignment.Center
+                ) {
+                   // Using Material Icon fallback since script might not have fetched 'play' perfectly or ID is unknown
+                   Icon(
+                       imageVector = androidx.compose.material.icons.Icons.Default.PlayArrow,
+                       contentDescription = "Continue",
+                       tint = Color.White
+                   )
                 }
             }
         }

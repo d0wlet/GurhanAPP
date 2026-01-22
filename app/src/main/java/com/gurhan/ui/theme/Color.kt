@@ -2,21 +2,29 @@ package com.gurhan.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Core Theme Colors (Updated for iOS feel)
-val TealPrimary = Color(0xFF0D9488) // Keep main brand color
-val BackgroundColor = Color(0xFFF2F4F6) // iOS-like soft gray/blue background
-val SurfaceColor = Color(0xFFFFFFFF)
-val DividerColor = Color(0xFFE5E5EA) // System Gray 5
+// Primary Brand Colors (Deep Emerald & Gold)
+val PrimaryGreen = Color(0xFF047857) // Emerald 700
+val PrimaryGreenDark = Color(0xFF064E3B) // Emerald 900
+val PrimaryGreenLight = Color(0xFF10B981) // Emerald 500
+
+val AccentGold = Color(0xFFD97706) // Amber 600
+val AccentGoldLight = Color(0xFFFBBF24) // Amber 400
+
+// Background Colors
+val BackgroundCream = Color(0xFFFAFAF9) // Stone 50 (Warm white)
+val SurfaceWhite = Color(0xFFFFFFFF)
+val SurfaceCard = Color(0xFFFFFFFF)
 
 // Text Colors
-val TextPrimary = Color(0xFF000000)
-val TextSecondary = Color(0xFF8E8E93) // System Gray
-val TextTertiary = Color(0xFFC7C7CC)
-
-// Hero Gradient (Subtler)
-val TealGradientStart = Color(0xFF2DD4BF)
-val TealGradientEnd = Color(0xFF0F766E)
+val TextPrimary = Color(0xFF1C1917) // Stone 900
+val TextSecondary = Color(0xFF57534E) // Stone 500
+val TextTertiary = Color(0xFFA8A29E) // Stone 400
+val TextOnPrimary = Color(0xFFFFFFFF)
 
 // Status Colors
-val SuccessColor = Color(0xFF34C759)
-val WarningColor = Color(0xFFFFCC00)
+val ErrorRed = Color(0xFFEF4444)
+val SuccessGreen = Color(0xFF22C55E)
+
+// UI Element Colors
+val DividerColor = Color(0xFFE7E5E4) // Stone 200
+val IconTint = Color(0xFF44403C) // Stone 700

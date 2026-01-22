@@ -1,86 +1,72 @@
 package com.gurhan.ui.screens
 
-import androidx.compose.animation.core.tween
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.gurhan.data.repository.QuranRepository
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.gurhan.data.model.Surah
+import com.gurhan.data.model.Verse
 import com.gurhan.ui.components.HeroSection
-import com.gurhan.ui.components.SearchBar
 import com.gurhan.ui.components.SurahCard
+import com.gurhan.ui.theme.BackgroundCream
+import com.gurhan.viewmodel.QuranViewModel
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-
-import androidx.compose.ui.platform.LocalContext
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
-    onSurahClick: (com.gurhan.data.model.Surah) -> Unit,
+    viewModel: QuranViewModel = viewModel(),
+    onSurahClick: (Surah) -> Unit,
     onSettingsClick: () -> Unit,
-    onVerseClick: (com.gurhan.data.model.Surah, com.gurhan.data.model.Verse) -> Unit
+    onVerseClick: (Surah, Verse) -> Unit
 ) {
-    val context = LocalContext.current
-    val repository = remember { QuranRepository(context) }
-    var searchQuery by remember { mutableStateOf("") }
-    val allSurahs = remember { repository.getAllSurahs() }
-    val verseOfTheDay = remember { repository.getVerseOfTheDay() }
-    
-    val filteredSurahs = remember(searchQuery) {
-        if (searchQuery.isEmpty()) allSurahs
-        else repository.searchSurahs(searchQuery)
-    }
-    
-    // Animation state
-    val listState = androidx.compose.foundation.lazy.rememberLazyListState()
-    
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.background
-    ) { paddingValues ->
+    val surahs by viewModel.surahs.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(BackgroundCream) // Global background color
+    ) {
+        // Scrollable Content
         LazyColumn(
-            state = listState,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            verticalArrangement = Arrangement.spacedBy(0.dp) // iOS Style Grouped List
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 100.dp) // Space for floating bottom bar
         ) {
-            // Hero Section
+            // Hero Section item
             item {
                 HeroSection(
-                    verseOfTheDay = verseOfTheDay,
-                    onSettingsClick = onSettingsClick,
-                    onVerseClick = onVerseClick
+                    onContinueClick = {
+                        // Logic to resume reading
+                    }
                 )
             }
             
-            // Search Bar
+            // Spacer
             item {
-                Spacer(modifier = Modifier.height(16.dp))
-                SearchBar(
-                    query = searchQuery,
-                    onQueryChange = { searchQuery = it },
-                    modifier = Modifier.padding(horizontal = 24.dp)
-                )
                 Spacer(modifier = Modifier.height(24.dp))
             }
             
             // Surah List
-            items(filteredSurahs) { surah ->
-                SurahCard(
-                    surah = surah,
-                    onClick = { onSurahClick(surah) },
-                    modifier = Modifier.padding(horizontal = 24.dp)
-                )
-            }
-            
-            // Bottom spacing
-            item {
-                Spacer(modifier = Modifier.height(80.dp))
+            if (isLoading) {
+                item {
+                    Box(modifier = Modifier.fillParentMaxWidth(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(color = com.gurhan.ui.theme.PrimaryGreen)
+                    }
+                }
+            } else {
+                items(surahs) { surah ->
+                    SurahCard(
+                        surah = surah,
+                        onClick = { onSurahClick(surah) },
+                        modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
+                    )
+                }
             }
         }
     }
