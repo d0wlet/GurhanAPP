@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -24,7 +25,8 @@ import com.gurhan.ui.theme.*
 
 @Composable
 fun HeroSection(
-    verseOfTheDay: Pair<com.gurhan.data.model.Surah, com.gurhan.data.model.Verse>?
+    verseOfTheDay: Pair<com.gurhan.data.model.Surah, com.gurhan.data.model.Verse>?,
+    fontSizeScale: Float = 1.0f
 ) {
     if (verseOfTheDay == null) return
 
@@ -38,8 +40,8 @@ fun HeroSection(
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        PrimaryGreenDark,
-                        PrimaryGreen
+                        MaterialTheme.colorScheme.primary, 
+                        MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
                     )
                 )
             )
@@ -53,37 +55,21 @@ fun HeroSection(
         ) {
             
             Text(
-                text = "Günün Aýaty",
+                text = "Günüň Aýaty",
                 style = MaterialTheme.typography.titleMedium,
-                color = AccentGold,
-                fontSize = 16.sp,
+                color = AccentGoldLight,
+                fontSize = (16 * fontSizeScale).sp,
                 fontWeight = FontWeight.Bold
             )
             
             Spacer(modifier = Modifier.height(16.dp))
             
-            // Arabic Text
+            // Turkmen Translation
             Text(
                 text = verse.turkmenTranslation,
-                // Model Verse(surahId, verseNumber, turkmenTranslation, arabicText)
-                // in code I see: verse.text is Turkmen? 
-                // Let's check model definition or usage.
-                // In parse_v5/v6: text is Turkmen. arabicText is "" for now (file didn't have it).
-                // Wait, parse_v6 left arabicText empty.
-                // And quran_final_linear.txt didn't have arabic.
-                // User said "tek tek çek pdf den". PDF *had* arabic. But text file doesn't?
-                // Text file snippet: "1. Süýnen...". Just Turkmen.
-                // So Arabic is MISSING in text source.
-                // I will use Turkmen text only for now.
-                // Or try to use 'text' as Arabic if I was wrong.
-                // In json_to_sqlite log: surah['verses'] has 'text' and 'arabicText'. 
-                // parse_v6 sets arabicText = "".
-                // So I only have Turkmen.
-                // I will display Turkmen prominently.
-                // text = verse.text
                 style = MaterialTheme.typography.headlineMedium,
-                color = TextOnPrimary,
-                fontSize = 20.sp, 
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontSize = (20 * fontSizeScale).sp, 
                 fontWeight = FontWeight.SemiBold,
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
@@ -94,8 +80,8 @@ fun HeroSection(
             Text(
                 text = "${surah.name}, ${verse.verseNumber}-nji aýat",
                 style = MaterialTheme.typography.bodyMedium,
-                color = TextOnPrimary.copy(alpha = 0.8f),
-                fontSize = 14.sp
+                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f),
+                fontSize = (14 * fontSizeScale).sp
             )
         }
     }

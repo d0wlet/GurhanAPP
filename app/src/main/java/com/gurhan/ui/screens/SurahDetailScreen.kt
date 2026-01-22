@@ -29,6 +29,9 @@ fun SurahDetailScreen(
 ) {
     val context = LocalContext.current
     val repository = remember { QuranRepository(context) }
+    val prefs = remember { com.gurhan.util.PreferenceManager(context) }
+    val fontSizeScale = remember { prefs.getFontSize() }
+    
     val surah = remember(surahId) { repository.getSurahById(surahId) }
     val verses = remember(surahId) { repository.getVersesBySurahId(surahId) }
     
@@ -48,7 +51,6 @@ fun SurahDetailScreen(
     // Save as Last Read on entry
     androidx.compose.runtime.LaunchedEffect(surah) {
         if (surah != null) {
-            val prefs = com.gurhan.util.PreferenceManager(context)
             prefs.saveLastRead(surah.id, surah.name, 1) // Default to verse 1 for now
         }
     }
@@ -61,13 +63,13 @@ fun SurahDetailScreen(
                 title = { Text(surah.name) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Yza")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.White,
-                    titleContentColor = PrimaryGreen,
-                    navigationIconContentColor = PrimaryGreen
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                    navigationIconContentColor = MaterialTheme.colorScheme.primary
                 )
             )
         }
@@ -77,7 +79,7 @@ fun SurahDetailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(Color.White),
+                .background(MaterialTheme.colorScheme.background),
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -87,7 +89,7 @@ fun SurahDetailScreen(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(containerColor = PrimaryGreen),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                    shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp)
                 ) {
                     Column(
                         modifier = Modifier
@@ -124,28 +126,29 @@ fun SurahDetailScreen(
                 ) {
                     // Verse Number & Text inline for flow, or slight separation
                     Row(modifier = Modifier.fillMaxWidth()) {
-                         Text(
+                          Text(
                             text = "${verse.verseNumber}. ${verse.turkmenTranslation}",
                             style = MaterialTheme.typography.bodyLarge,
-                            fontSize = 18.sp,
-                            lineHeight = 28.sp,
-                            color = Color.Black.copy(alpha = 0.87f)
+                            fontSize = (18 * fontSizeScale).sp,
+                            lineHeight = (28 * fontSizeScale).sp,
+                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.87f)
                         )
                     }
                     
                     // If Arabic text exists (future proofing), show it
                     if (verse.arabicText.isNotBlank()) {
-                         Text(
+                          Text(
                             text = verse.arabicText,
                             style = MaterialTheme.typography.headlineMedium,
-                            fontSize = 24.sp,
-                            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-                            textAlign = androidx.compose.ui.text.style.TextAlign.End
+                            fontSize = (24 * fontSizeScale).sp,
+                            modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
+                            textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 }
                 // Optional: Thin separator
-                Divider(color = Color.LightGray.copy(alpha = 0.2f), thickness = 0.5.dp)
+                HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.1f), thickness = 0.5.dp)
             }
         }
     }

@@ -55,7 +55,7 @@ fun ModernBottomBar(navController: NavController) {
             )
     ) {
         Surface(
-            color = SurfaceWhite,
+            color = MaterialTheme.colorScheme.surface,
             shape = RoundedCornerShape(32.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -99,7 +99,7 @@ fun BottomBarItem(
         label = "scale"
     )
     
-    val color = if (isSelected) PrimaryGreen else Color.Gray.copy(alpha = 0.6f)
+    val color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

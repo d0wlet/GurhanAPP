@@ -23,23 +23,44 @@ import com.gurhan.ui.screens.TasbihScreen
 import com.gurhan.ui.theme.GurhanTheme
 
 class MainActivity : ComponentActivity() {
+    private lateinit var preferenceManager: com.gurhan.util.PreferenceManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        preferenceManager = com.gurhan.util.PreferenceManager(this)
         
         // Enable edge-to-edge display
         enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         
         setContent {
-            GurhanTheme {
-                MainScreen()
+            val darkMode = preferenceManager.getDarkMode()
+            val isDark = when (darkMode) {
+                1 -> false // Light
+                2 -> true  // Dark
+                else -> androidx.compose.foundation.isSystemInDarkTheme()
+            }
+            
+            // Keep Screen On logic
+            val keepScreenOn = preferenceManager.isKeepScreenOn()
+            androidx.compose.runtime.DisposableEffect(keepScreenOn) {
+                if (keepScreenOn) {
+                    window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                } else {
+                    window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                }
+                onDispose {}
+            }
+
+            GurhanTheme(darkTheme = isDark) {
+                MainScreen(preferenceManager)
             }
         }
     }
 }
 
 @Composable
-fun MainScreen() {
+fun MainScreen(preferenceManager: com.gurhan.util.PreferenceManager) {
     val navController = rememberNavController()
 
     Scaffold(
@@ -59,6 +80,7 @@ fun MainScreen() {
             // Home Screen
             composable("home") {
                 HomeScreen(
+                    preferenceManager = preferenceManager,
                     onSurahClick = { surah ->
                         navController.navigate("surah/${surah.id}")
                     },
@@ -93,7 +115,7 @@ fun MainScreen() {
             
             // Settings Screen
             composable("settings") {
-                SettingsScreen()
+                SettingsScreen(preferenceManager)
             }
             
             // Surah Detail Screen

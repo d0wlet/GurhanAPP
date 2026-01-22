@@ -42,7 +42,7 @@ fun TasbihScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackgroundCream)
+            .background(MaterialTheme.colorScheme.background)
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -50,7 +50,7 @@ fun TasbihScreen() {
         Text(
             text = "SubhanAllah",
             style = MaterialTheme.typography.headlineLarge,
-            color = PrimaryGreenDark,
+            color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Bold
         )
         
@@ -76,7 +76,7 @@ fun TasbihScreen() {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            ControlChip(text = "Reset", onClick = { count = 0 })
+            ControlChip(text = "Tazelemek", onClick = { count = 0 })
             ControlChip(text = "33", isSelected = target == 33, onClick = { target = 33 })
             ControlChip(text = "99", isSelected = target == 99, onClick = { target = 99 })
         }
@@ -107,9 +107,9 @@ fun TASBIHButton(
         modifier = Modifier
             .size(280.dp)
             .scale(scale)
-            .shadow(20.dp, CircleShape, spotColor = PrimaryGreen.copy(alpha = 0.3f))
+            .shadow(20.dp, CircleShape, spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
             .clip(CircleShape)
-            .background(SurfaceWhite)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
             .clickable(
                 interactionSource = interactionSource,
                 indication = null
@@ -128,7 +128,12 @@ fun TASBIHButton(
             
             drawArc(
                 brush = Brush.sweepGradient(
-                    colors = listOf(PrimaryGreenLight, PrimaryGreen, PrimaryGreenDark, PrimaryGreenLight)
+                    colors = listOf(
+                        PrimaryGreenLight, 
+                        MaterialTheme.colorScheme.primary, 
+                        PrimaryGreenDark, 
+                        PrimaryGreenLight
+                    )
                 ),
                 startAngle = -90f,
                 sweepAngle = animatedProgress * 360f,
@@ -145,12 +150,12 @@ fun TASBIHButton(
                 text = count.toString(),
                 fontSize = 64.sp,
                 fontWeight = FontWeight.Bold,
-                color = PrimaryGreenDark
+                color = MaterialTheme.colorScheme.primary
             )
             Text(
                 text = "/ $target",
                 fontSize = 20.sp,
-                color = TextSecondary
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -165,13 +170,13 @@ fun ControlChip(
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
-            .background(if (isSelected) PrimaryGreen else Color.White)
+            .background(if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant)
             .clickable { onClick() }
             .padding(horizontal = 24.dp, vertical = 12.dp)
     ) {
         Text(
             text = text,
-            color = if (isSelected) Color.White else TextSecondary,
+            color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
             fontWeight = FontWeight.Medium
         )
     }

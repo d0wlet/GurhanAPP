@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.Search
 
 @Composable
 fun HomeScreen(
+    preferenceManager: com.gurhan.util.PreferenceManager,
     viewModel: QuranViewModel = viewModel(),
     onSurahClick: (Surah) -> Unit,
     onSettingsClick: () -> Unit,
@@ -36,6 +37,7 @@ fun HomeScreen(
     val surahs by viewModel.surahs.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val verseOfTheDay by viewModel.verseOfTheDay.collectAsState()
+    val fontSizeScale = remember { preferenceManager.getFontSize() }
     
     // Search State
     var searchQuery by remember { mutableStateOf("") }
@@ -46,16 +48,13 @@ fun HomeScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackgroundCream)
+            .background(MaterialTheme.colorScheme.background)
     ) {
     
         // Parallax Header (Behind List)
-        // We use derivedStateOf to avoid recomposition on every pixel scroll if possible, or just standard state
         val headerHeight = 320.dp
         val headerHeightPx = with(androidx.compose.ui.platform.LocalDensity.current) { headerHeight.toPx() }
         
-        // Parallax Logic: Move up at half speed, fade out
-        // Only visible if first item is visible (or offset < height)
         val firstItemTranslationY by remember {
             derivedStateOf {
                 if (listState.firstVisibleItemIndex == 0) {
@@ -69,7 +68,6 @@ fun HomeScreen(
         val headerAlpha by remember {
             derivedStateOf {
                  if (listState.firstVisibleItemIndex == 0) {
-                    // Fade out as we scroll
                     val progress = listState.firstVisibleItemScrollOffset / headerHeightPx
                     (1f - progress * 1.5f).coerceIn(0f, 1f)
                 } else {
@@ -86,9 +84,9 @@ fun HomeScreen(
                     alpha = headerAlpha
                     translationY = -firstItemTranslationY
                 }
-                .align(Alignment.TopCenter) // Make sure it stays top
+                .align(Alignment.TopCenter)
         ) {
-            HeroSection(verseOfTheDay)
+            HeroSection(verseOfTheDay, fontSizeScale)
         }
 
         // Foreground List
@@ -99,10 +97,10 @@ fun HomeScreen(
         ) {
              // Spacer for Header Visibility
             item {
-                Spacer(modifier = Modifier.height(headerHeight - 20.dp)) // Slight overlap
+                Spacer(modifier = Modifier.height(headerHeight - 20.dp))
             }
             
-            // Search Bar (Sticky-ish manually)
+            // Search Bar
             item {
                 androidx.compose.material3.OutlinedTextField(
                     value = searchQuery,
@@ -114,33 +112,30 @@ fun HomeScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp)
                         .padding(bottom = 16.dp)
-                        .shadow(8.dp, RoundedCornerShape(12.dp)), // Elevation for floating feel
+                        .shadow(8.dp, RoundedCornerShape(12.dp)),
                     placeholder = { Text("Sure gözle...") },
                     leadingIcon = { 
                         androidx.compose.material3.Icon(
                             imageVector = Icons.Default.Search, 
                             contentDescription = "Search",
-                            tint = TextSecondary
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     },
                     shape = RoundedCornerShape(12.dp),
                     colors = androidx.compose.material3.TextFieldDefaults.colors(
-                        focusedContainerColor = androidx.compose.ui.graphics.Color.White,
-                        unfocusedContainerColor = androidx.compose.ui.graphics.Color.White,
-                        focusedIndicatorColor = com.gurhan.ui.theme.PrimaryGreen,
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
                         unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent
                     ),
                     singleLine = true
                 )
             }
             
-            // Surah List logic...
-            
-            // Surah List
             if (isLoading) {
                 item {
                     Box(modifier = Modifier.fillParentMaxWidth(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator(color = com.gurhan.ui.theme.PrimaryGreen)
+                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                     }
                 }
             } else {
@@ -148,6 +143,7 @@ fun HomeScreen(
                     SurahCard(
                         surah = surah,
                         onClick = { onSurahClick(surah) },
+                        fontSizeScale = fontSizeScale,
                         modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
                     )
                 }

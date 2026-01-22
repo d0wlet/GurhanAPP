@@ -28,3 +28,12 @@ val SuccessGreen = Color(0xFF22C55E)
 // UI Element Colors
 val DividerColor = Color(0xFFE7E5E4) // Stone 200
 val IconTint = Color(0xFF44403C) // Stone 700
+
+// Premium Dark Mode Colors (Gray-based)
+val DarkBackground = Color(0xFF0C0A09) // Stone 950 (Almost black but warmer)
+val DarkSurface = Color(0xFF1C1917)    // Stone 900
+val DarkSurfaceCard = Color(0xFF292524) // Stone 800
+val DarkTextPrimary = Color(0xFFFAFAF9)  // Stone 50
+val DarkTextSecondary = Color(0xFFD6D3D1) // Stone 300
+val DarkDivider = Color(0xFF44403C)    // Stone 700
+val DarkIconTint = Color(0xFFD6D3D1)   // Stone 300

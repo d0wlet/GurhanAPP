@@ -18,13 +18,16 @@ import androidx.core.view.WindowCompat
 private val DarkColorScheme = darkColorScheme(
     primary = PrimaryGreenLight,
     onPrimary = TextOnPrimary,
-    secondary = AccentGold,
+    secondary = AccentGoldLight,
     onSecondary = TextOnPrimary,
-    tertiary = PrimaryGreen,
-    background = TextPrimary, // Dark background
-    surface = TextSecondary, // Dark surface
-    onBackground = BackgroundCream,
-    onSurface = BackgroundCream
+    tertiary = PrimaryGreenLight,
+    background = DarkBackground,
+    surface = DarkSurface,
+    onBackground = DarkTextPrimary,
+    onSurface = DarkTextPrimary,
+    surfaceVariant = DarkSurfaceCard,
+    onSurfaceVariant = DarkTextSecondary,
+    outline = DarkDivider
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -44,10 +47,21 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun GurhanTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
+    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = colorScheme.primary.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+        }
+    }
+
     MaterialTheme(
-        colorScheme = LightColorScheme,
+        colorScheme = colorScheme,
         typography = Typography,
         content = content
     )
