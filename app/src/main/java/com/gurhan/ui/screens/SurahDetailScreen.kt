@@ -44,6 +44,14 @@ fun SurahDetailScreen(
             }
         }
     }
+    
+    // Save as Last Read on entry
+    androidx.compose.runtime.LaunchedEffect(surah) {
+        if (surah != null) {
+            val prefs = com.gurhan.util.PreferenceManager(context)
+            prefs.saveLastRead(surah.id, surah.name, 1) // Default to verse 1 for now
+        }
+    }
 
     if (surah == null) return
 

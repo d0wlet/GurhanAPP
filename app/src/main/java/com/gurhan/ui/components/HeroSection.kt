@@ -42,24 +42,7 @@ fun HeroSection(
                 )
             )
     ) {
-        // Decorative circles for background pattern sensation
-        Box(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .offset(x = 60.dp, y = (-40).dp)
-                .size(200.dp)
-                .clip(CircleShape)
-                .background(Color.White.copy(alpha = 0.05f))
-        )
-        
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .offset(x = (-40).dp, y = 40.dp)
-                .size(150.dp)
-                .clip(CircleShape)
-                .background(Color.White.copy(alpha = 0.05f))
-        )
+
 
         Column(
             modifier = Modifier
