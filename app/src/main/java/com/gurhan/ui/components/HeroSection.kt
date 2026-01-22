@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -141,7 +142,7 @@ fun HeroSection(
                 ) {
                    // Using Material Icon fallback since script might not have fetched 'play' perfectly or ID is unknown
                    Icon(
-                       imageVector = androidx.compose.material.icons.Icons.Default.PlayArrow,
+                       imageVector = androidx.compose.material.icons.Icons.Filled.PlayArrow,
                        contentDescription = "Continue",
                        tint = Color.White
                    )

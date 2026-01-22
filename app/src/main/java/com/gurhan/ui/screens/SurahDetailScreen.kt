@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gurhan.data.repository.QuranRepository
-import com.gurhan.ui.theme.TealPrimary
+import com.gurhan.ui.theme.PrimaryGreen
 
 import androidx.compose.ui.platform.LocalContext
 
@@ -58,8 +58,8 @@ fun SurahDetailScreen(
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.White,
-                    titleContentColor = TealPrimary,
-                    navigationIconContentColor = TealPrimary
+                    titleContentColor = PrimaryGreen,
+                    navigationIconContentColor = PrimaryGreen
                 )
             )
         }
@@ -77,7 +77,7 @@ fun SurahDetailScreen(
             item {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = TealPrimary),
+                    colors = CardDefaults.cardColors(containerColor = PrimaryGreen),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
                 ) {
@@ -125,13 +125,13 @@ fun SurahDetailScreen(
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .background(TealPrimary.copy(alpha=0.1f), androidx.compose.foundation.shape.RoundedCornerShape(8.dp))
+                                    .background(PrimaryGreen.copy(alpha=0.1f), androidx.compose.foundation.shape.RoundedCornerShape(8.dp))
                                     .padding(horizontal = 8.dp, vertical = 4.dp),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
                                     text = "${surah.id}:${verse.verseNumber}",
-                                    color = TealPrimary,
+                                    color = PrimaryGreen,
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold
                                 )

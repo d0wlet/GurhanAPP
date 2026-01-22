@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gurhan.ui.theme.TealPrimary
+import com.gurhan.ui.theme.PrimaryGreen
 
 @Composable
 fun SettingsScreen() {
@@ -49,7 +49,7 @@ fun SettingsScreen() {
                     Icon(
                         imageVector = Icons.Default.Settings,
                         contentDescription = null,
-                        tint = TealPrimary,
+                        tint = PrimaryGreen,
                         modifier = Modifier.size(24.dp)
                     )
                     Text(
@@ -63,8 +63,8 @@ fun SettingsScreen() {
                     checked = darkMode,
                     onCheckedChange = { darkMode = it },
                     colors = SwitchDefaults.colors(
-                        checkedThumbColor = TealPrimary,
-                        checkedTrackColor = TealPrimary.copy(alpha = 0.5f),
+                        checkedThumbColor = PrimaryGreen,
+                        checkedTrackColor = PrimaryGreen.copy(alpha = 0.5f),
                         uncheckedThumbColor = Color.Gray,
                         uncheckedTrackColor = Color.LightGray
                     )
