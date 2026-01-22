@@ -123,11 +123,4 @@ fun SurahCard(
     }
 }
 
-// Helper extension for shadows since modifier.shadow doesn't always support spotColor on older Compose versions directly without custom modifier, 
-// using standard modifier.shadow here but ideally we'd use a custom modifier for colored shadows.
-// Standard shadow is fine for now.
-fun Modifier.shadow(
-    elevation: androidx.compose.ui.unit.Dp,
-    shape: androidx.compose.ui.graphics.Shape,
-    spotColor: Color
-) = this.shadow(elevation, shape, spotColor = spotColor)
+
