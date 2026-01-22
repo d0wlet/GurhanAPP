@@ -51,7 +51,7 @@ fun SettingsScreen(preferenceManager: com.gurhan.util.PreferenceManager) {
                 }
             )
             
-            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
+            Divider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
             
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
@@ -95,7 +95,7 @@ fun SettingsScreen(preferenceManager: com.gurhan.util.PreferenceManager) {
                 }
             )
             
-            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
+            Divider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
             
             SettingsToggleItem(
                 title = "Bildirişler",
