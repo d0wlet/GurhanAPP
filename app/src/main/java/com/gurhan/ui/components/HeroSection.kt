@@ -64,7 +64,7 @@ fun HeroSection(
             
             // Arabic Text
             Text(
-                text = verse.text, // Assuming text is arabic? No, text is Turkmen in model? Let's check model.
+                text = verse.turkmenTranslation,
                 // Model Verse(surahId, verseNumber, turkmenTranslation, arabicText)
                 // in code I see: verse.text is Turkmen? 
                 // Let's check model definition or usage.
