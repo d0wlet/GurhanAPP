@@ -18,6 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gurhan.R
 import com.gurhan.ui.theme.*
+import java.time.chrono.HijrahDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun HeroSection(
@@ -28,10 +31,12 @@ fun HeroSection(
 
     val (surah, verse) = verseOfTheDay
 
-    // Get current Gregorian date
-    val currentDate = remember {
-        val sdf = java.text.SimpleDateFormat("dd MMMM yyyy", java.util.Locale("tr"))
-        sdf.format(java.util.Date())
+    // Get current Hijri date
+    val hijriDate = remember {
+        val today = java.time.LocalDate.now()
+        val hDate = HijrahDate.from(today)
+        val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("tr"))
+        hDate.format(formatter)
     }
 
     Box(
@@ -64,24 +69,36 @@ fun HeroSection(
                 .padding(top = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Header Row with Date
+            // Header Row with Hijri Date Card
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Column {
-                    Text(
-                        text = "Essalamu aleýkum",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color.White.copy(alpha = 0.9f),
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = currentDate,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color.White.copy(alpha = 0.7f)
-                    )
+                // Hijri Date in a small transparent card
+                Surface(
+                    color = Color.White.copy(alpha = 0.15f),
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.wrapContentSize()
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_quran_rehal),
+                            contentDescription = null,
+                            tint = Color.White.copy(alpha = 0.8f),
+                            modifier = Modifier.size(14.dp)
+                        )
+                        Text(
+                            text = hijriDate,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
                 
                 Icon(
@@ -92,7 +109,7 @@ fun HeroSection(
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             // Glassmorphism Card for Verse of the Day
             Box(
@@ -111,7 +128,7 @@ fun HeroSection(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_quran_rehal), // Using same icon as placeholder
+                            painter = painterResource(id = R.drawable.ic_quran_rehal),
                             contentDescription = null,
                             tint = AccentGoldLight,
                             modifier = Modifier.size(18.dp)

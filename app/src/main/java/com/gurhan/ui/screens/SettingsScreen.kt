@@ -13,14 +13,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gurhan.ui.theme.PrimaryGreen
-import com.gurhan.ui.theme.SurfaceWhite
 
 @Composable
 fun SettingsScreen(preferenceManager: com.gurhan.util.PreferenceManager) {
-    var darkMode by remember { mutableStateOf(preferenceManager.getDarkMode()) }
-    var fontSize by remember { mutableFloatStateOf(preferenceManager.getFontSize()) }
-    var keepScreenOn by remember { mutableStateOf(preferenceManager.isKeepScreenOn()) }
+    val darkMode by preferenceManager.darkModeFlow.collectAsState()
+    val keepScreenOn by preferenceManager.keepScreenOnFlow.collectAsState()
+    
+    // Non-reactive but needs local state for the slider to feel smooth
+    var fontSize by remember { mutableStateOf(preferenceManager.getFontSize()) }
     var notificationsEnabled by remember { mutableStateOf(preferenceManager.areNotificationsEnabled()) }
 
     Column(
@@ -48,12 +48,14 @@ fun SettingsScreen(preferenceManager: com.gurhan.util.PreferenceManager) {
                 checked = darkMode == 2,
                 onCheckedChange = { 
                     val newMode = if (it) 2 else 1
-                    darkMode = newMode
                     preferenceManager.setDarkMode(newMode)
                 }
             )
             
-            Divider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 16.dp), 
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+            )
             
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
@@ -74,8 +76,8 @@ fun SettingsScreen(preferenceManager: com.gurhan.util.PreferenceManager) {
                     },
                     valueRange = 0.8f..1.5f,
                     colors = SliderDefaults.colors(
-                        thumbColor = PrimaryGreen,
-                        activeTrackColor = PrimaryGreen
+                        thumbColor = MaterialTheme.colorScheme.primary,
+                        activeTrackColor = MaterialTheme.colorScheme.primary
                     )
                 )
             }
@@ -92,12 +94,14 @@ fun SettingsScreen(preferenceManager: com.gurhan.util.PreferenceManager) {
                 subtitle = "Okap durkaňyz ekran öçmez",
                 checked = keepScreenOn,
                 onCheckedChange = { 
-                    keepScreenOn = it
                     preferenceManager.setKeepScreenOn(it)
                 }
             )
             
-            Divider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 16.dp), 
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+            )
             
             SettingsToggleItem(
                 title = "Bildirişler",
@@ -126,7 +130,7 @@ fun SectionHeader(title: String) {
     Text(
         text = title,
         style = MaterialTheme.typography.labelLarge,
-        color = PrimaryGreen,
+        color = MaterialTheme.colorScheme.primary,
         fontWeight = FontWeight.Bold,
         modifier = Modifier.padding(start = 8.dp, bottom = 8.dp)
     )
@@ -174,10 +178,10 @@ fun SettingsToggleItem(
             checked = checked,
             onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(
-                checkedThumbColor = SurfaceWhite,
-                checkedTrackColor = PrimaryGreen,
-                uncheckedThumbColor = Color.LightGray,
-                uncheckedTrackColor = Color.DarkGray.copy(alpha = 0.3f)
+                checkedThumbColor = MaterialTheme.colorScheme.surface,
+                checkedTrackColor = MaterialTheme.colorScheme.primary,
+                uncheckedThumbColor = MaterialTheme.colorScheme.outline,
+                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
             )
         )
     }
