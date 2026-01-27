@@ -52,7 +52,7 @@ fun SettingsScreen(preferenceManager: com.gurhan.util.PreferenceManager) {
                 }
             )
             
-            HorizontalDivider(
+            Divider(
                 modifier = Modifier.padding(horizontal = 16.dp), 
                 color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
             )
@@ -98,7 +98,7 @@ fun SettingsScreen(preferenceManager: com.gurhan.util.PreferenceManager) {
                 }
             )
             
-            HorizontalDivider(
+            Divider(
                 modifier = Modifier.padding(horizontal = 16.dp), 
                 color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
             )
