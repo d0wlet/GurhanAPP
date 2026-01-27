@@ -1,17 +1,13 @@
 package com.gurhan.ui.theme
 
 import android.app.Activity
-import android.os.Build
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
@@ -50,7 +46,41 @@ fun GurhanTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val targetColorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    
+    // Animated color scheme
+    val colorScheme = ColorScheme(
+        primary = animateColorAsState(targetColorScheme.primary, tween(500)).value,
+        onPrimary = animateColorAsState(targetColorScheme.onPrimary, tween(500)).value,
+        primaryContainer = animateColorAsState(targetColorScheme.primaryContainer, tween(500)).value,
+        onPrimaryContainer = animateColorAsState(targetColorScheme.onPrimaryContainer, tween(500)).value,
+        inversePrimary = animateColorAsState(targetColorScheme.inversePrimary, tween(500)).value,
+        secondary = animateColorAsState(targetColorScheme.secondary, tween(500)).value,
+        onSecondary = animateColorAsState(targetColorScheme.onSecondary, tween(500)).value,
+        secondaryContainer = animateColorAsState(targetColorScheme.secondaryContainer, tween(500)).value,
+        onSecondaryContainer = animateColorAsState(targetColorScheme.onSecondaryContainer, tween(500)).value,
+        tertiary = animateColorAsState(targetColorScheme.tertiary, tween(500)).value,
+        onTertiary = animateColorAsState(targetColorScheme.onTertiary, tween(500)).value,
+        tertiaryContainer = animateColorAsState(targetColorScheme.tertiaryContainer, tween(500)).value,
+        onTertiaryContainer = animateColorAsState(targetColorScheme.onTertiaryContainer, tween(500)).value,
+        background = animateColorAsState(targetColorScheme.background, tween(500)).value,
+        onBackground = animateColorAsState(targetColorScheme.onBackground, tween(500)).value,
+        surface = animateColorAsState(targetColorScheme.surface, tween(500)).value,
+        onSurface = animateColorAsState(targetColorScheme.onSurface, tween(500)).value,
+        surfaceVariant = animateColorAsState(targetColorScheme.surfaceVariant, tween(500)).value,
+        onSurfaceVariant = animateColorAsState(targetColorScheme.onSurfaceVariant, tween(500)).value,
+        surfaceTint = animateColorAsState(targetColorScheme.surfaceTint, tween(500)).value,
+        inverseSurface = animateColorAsState(targetColorScheme.inverseSurface, tween(500)).value,
+        inverseOnSurface = animateColorAsState(targetColorScheme.inverseOnSurface, tween(500)).value,
+        error = animateColorAsState(targetColorScheme.error, tween(500)).value,
+        onError = animateColorAsState(targetColorScheme.onError, tween(500)).value,
+        errorContainer = animateColorAsState(targetColorScheme.errorContainer, tween(500)).value,
+        onErrorContainer = animateColorAsState(targetColorScheme.onErrorContainer, tween(500)).value,
+        outline = animateColorAsState(targetColorScheme.outline, tween(500)).value,
+        outlineVariant = animateColorAsState(targetColorScheme.outlineVariant, tween(500)).value,
+        scrim = animateColorAsState(targetColorScheme.scrim, tween(500)).value,
+    )
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
