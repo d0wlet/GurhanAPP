@@ -148,7 +148,7 @@ fun SurahDetailScreen(
                     }
                 }
                 // Optional: Thin separator
-                Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.1f), thickness = 0.5.dp)
+                HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.1f), thickness = 0.5.dp)
             }
         }
     }

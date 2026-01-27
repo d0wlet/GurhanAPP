@@ -20,15 +20,14 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = TextOnPrimary,
     secondary = AccentGoldLight,
     onSecondary = TextOnPrimary,
-    tertiary = PrimaryGreenLight,
+    tertiary = ArabicTextDark,
     background = DarkBackground,
     surface = DarkSurface,
     onBackground = DarkTextPrimary,
     onSurface = DarkTextPrimary,
     surfaceVariant = DarkSurfaceCard,
     onSurfaceVariant = DarkTextSecondary,
-    outline = DarkDivider,
-    tertiary = ArabicTextDark // For Arabic text in dark mode
+    outline = DarkDivider
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -36,15 +35,14 @@ private val LightColorScheme = lightColorScheme(
     onPrimary = TextOnPrimary,
     secondary = AccentGold,
     onSecondary = TextOnPrimary,
-    tertiary = PrimaryGreenDark,
+    tertiary = ArabicTextPrimary,
     background = BackgroundCream,
     surface = SurfaceWhite,
     onBackground = TextPrimary,
     onSurface = TextPrimary,
     surfaceVariant = SurfaceCard,
     onSurfaceVariant = TextSecondary,
-    outline = DividerColor,
-    tertiary = ArabicTextPrimary // For Arabic text in light mode
+    outline = DividerColor
 )
 
 @Composable
