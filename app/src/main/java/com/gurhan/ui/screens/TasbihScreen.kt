@@ -103,11 +103,13 @@ fun TASBIHButton(
         animationSpec = tween(500), label = "progress"
     )
 
+    val primaryColor = MaterialTheme.colorScheme.primary
+
     Box(
         modifier = Modifier
             .size(280.dp)
             .scale(scale)
-            .shadow(20.dp, CircleShape, spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
+            .shadow(20.dp, CircleShape, spotColor = primaryColor.copy(alpha = 0.3f))
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .clickable(
@@ -130,7 +132,7 @@ fun TASBIHButton(
                 brush = Brush.sweepGradient(
                     colors = listOf(
                         PrimaryGreenLight, 
-                        MaterialTheme.colorScheme.primary, 
+                        primaryColor, 
                         PrimaryGreenDark, 
                         PrimaryGreenLight
                     )
