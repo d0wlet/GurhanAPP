@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
@@ -34,7 +36,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         
         setContent {
-            val darkMode = preferenceManager.getDarkMode()
+            val darkMode by preferenceManager.darkModeFlow.collectAsState()
             val isDark = when (darkMode) {
                 1 -> false // Light
                 2 -> true  // Dark
@@ -42,7 +44,7 @@ class MainActivity : ComponentActivity() {
             }
             
             // Keep Screen On logic
-            val keepScreenOn = preferenceManager.isKeepScreenOn()
+            val keepScreenOn by preferenceManager.keepScreenOnFlow.collectAsState()
             androidx.compose.runtime.DisposableEffect(keepScreenOn) {
                 if (keepScreenOn) {
                     window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)

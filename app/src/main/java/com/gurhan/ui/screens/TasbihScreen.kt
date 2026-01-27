@@ -30,6 +30,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gurhan.ui.theme.*
+import androidx.compose.ui.tooling.preview.Preview
+
 import kotlin.math.min
 
 @Composable
@@ -181,5 +183,13 @@ fun ControlChip(
             color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
             fontWeight = FontWeight.Medium
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TasbihScreenPreview() {
+    GurhanTheme {
+        TasbihScreen()
     }
 }

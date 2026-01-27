@@ -27,7 +27,8 @@ private val DarkColorScheme = darkColorScheme(
     onSurface = DarkTextPrimary,
     surfaceVariant = DarkSurfaceCard,
     onSurfaceVariant = DarkTextSecondary,
-    outline = DarkDivider
+    outline = DarkDivider,
+    tertiary = ArabicTextDark // For Arabic text in dark mode
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -42,7 +43,8 @@ private val LightColorScheme = lightColorScheme(
     onSurface = TextPrimary,
     surfaceVariant = SurfaceCard,
     onSurfaceVariant = TextSecondary,
-    outline = DividerColor
+    outline = DividerColor,
+    tertiary = ArabicTextPrimary // For Arabic text in light mode
 )
 
 @Composable

@@ -20,6 +20,8 @@ val TextPrimary = Color(0xFF1C1917) // Stone 900
 val TextSecondary = Color(0xFF57534E) // Stone 500
 val TextTertiary = Color(0xFFA8A29E) // Stone 400
 val TextOnPrimary = Color(0xFFFFFFFF)
+val ArabicTextPrimary = Color(0xFF047857) // Same as PrimaryGreen for light theme
+
 
 // Status Colors
 val ErrorRed = Color(0xFFEF4444)
@@ -37,3 +39,4 @@ val DarkTextPrimary = Color(0xFFFAFAF9)  // Stone 50
 val DarkTextSecondary = Color(0xFFD6D3D1) // Stone 300
 val DarkDivider = Color(0xFF44403C)    // Stone 700
 val DarkIconTint = Color(0xFFD6D3D1)   // Stone 300
+val ArabicTextDark = Color(0xFFFFFFFF)  // White for dark mode

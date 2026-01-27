@@ -126,11 +126,10 @@ fun SurahCard(
                     }
                 }
 
-                // Arabic Name
                 Text(
                     text = surah.arabicName,
                     style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.tertiary,
                     fontSize = (24 * fontSizeScale).sp,
                     fontWeight = FontWeight.Normal,
                     textAlign = TextAlign.End

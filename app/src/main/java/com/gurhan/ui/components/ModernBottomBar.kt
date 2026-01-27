@@ -32,8 +32,8 @@ import com.gurhan.ui.theme.SurfaceWhite
 
 // Enum for tabs to keep it type-safe
 enum class BottomTab(val route: String, val title: String, val iconResId: Int) {
-    HOME("home", "Gurhan", R.drawable.ic_book_open), // Fallback or dynamic
-    TASBIH("tasbih", "Tesbih", R.drawable.ic_circle), // Fallback
+    HOME("home", "Gurhan", R.drawable.ic_quran_rehal),
+    TASBIH("tasbih", "Tesbih", R.drawable.tasbih),
     SETTINGS("settings", "Sazlamalar", R.drawable.ic_settings)
 }
 

@@ -143,7 +143,7 @@ fun SurahDetailScreen(
                             fontSize = (24 * fontSizeScale).sp,
                             modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
                             textAlign = androidx.compose.ui.text.style.TextAlign.End,
-                            color = MaterialTheme.colorScheme.primary
+                            color = MaterialTheme.colorScheme.tertiary
                         )
                     }
                 }

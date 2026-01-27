@@ -46,4 +46,19 @@ class PreferenceManager(context: Context) {
     // Dark Mode (0: System, 1: Light, 2: Dark)
     fun setDarkMode(mode: Int) = prefs.edit().putInt(KEY_DARK_MODE, mode).apply()
     fun getDarkMode(): Int = prefs.getInt(KEY_DARK_MODE, 0)
+
+    // Flows for reactive updates
+    val darkModeFlow = kotlinx.coroutines.flow.MutableStateFlow(getDarkMode())
+    val keepScreenOnFlow = kotlinx.coroutines.flow.MutableStateFlow(isKeepScreenOn())
+
+    private val listener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+        when (key) {
+            KEY_DARK_MODE -> darkModeFlow.value = getDarkMode()
+            KEY_KEEP_SCREEN_ON -> keepScreenOnFlow.value = isKeepScreenOn()
+        }
+    }
+
+    init {
+        prefs.registerOnSharedPreferenceChangeListener(listener)
+    }
 }
