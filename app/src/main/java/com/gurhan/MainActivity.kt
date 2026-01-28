@@ -55,16 +55,7 @@ class MainActivity : ComponentActivity() {
             }
 
             GurhanTheme(darkTheme = isDark) {
-                androidx.compose.animation.Crossfade(
-                    targetState = isDark,
-                    animationSpec = androidx.compose.animation.core.tween(500),
-                    label = "theme_fade"
-                ) { targetIsDark ->
-                    // Re-evaluate theme in the crossfade block to ensure colors are correct for the target state
-                    GurhanTheme(darkTheme = targetIsDark) {
-                        MainScreen(preferenceManager)
-                    }
-                }
+                MainScreen(preferenceManager)
             }
         }
     }

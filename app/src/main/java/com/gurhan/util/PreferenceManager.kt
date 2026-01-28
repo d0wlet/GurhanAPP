@@ -36,7 +36,10 @@ class PreferenceManager(context: Context) {
     fun getFontSize(): Float = prefs.getFloat(KEY_FONT_SIZE, 1.0f)
 
     // Keep Screen On
-    fun setKeepScreenOn(enabled: Boolean) = prefs.edit().putBoolean(KEY_KEEP_SCREEN_ON, enabled).apply()
+    fun setKeepScreenOn(enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_KEEP_SCREEN_ON, enabled).apply()
+        keepScreenOnFlow.value = enabled
+    }
     fun isKeepScreenOn(): Boolean = prefs.getBoolean(KEY_KEEP_SCREEN_ON, false)
 
     // Notifications
@@ -44,7 +47,10 @@ class PreferenceManager(context: Context) {
     fun areNotificationsEnabled(): Boolean = prefs.getBoolean(KEY_NOTIFICATIONS_ENABLED, true)
 
     // Dark Mode (0: System, 1: Light, 2: Dark)
-    fun setDarkMode(mode: Int) = prefs.edit().putInt(KEY_DARK_MODE, mode).apply()
+    fun setDarkMode(mode: Int) {
+        prefs.edit().putInt(KEY_DARK_MODE, mode).apply()
+        darkModeFlow.value = mode
+    }
     fun getDarkMode(): Int = prefs.getInt(KEY_DARK_MODE, 0)
 
     // Flows for reactive updates

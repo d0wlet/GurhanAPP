@@ -66,7 +66,7 @@ fun HeroSection(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(24.dp)
-                .padding(top = 32.dp),
+                .padding(top = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Header Row with Hijri Date Card
@@ -109,7 +109,7 @@ fun HeroSection(
                 )
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             // Glassmorphism Card for Verse of the Day
             Box(
