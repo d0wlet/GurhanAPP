@@ -77,7 +77,8 @@ fun SettingsScreen(preferenceManager: com.gurhan.util.PreferenceManager) {
                     valueRange = 0.8f..1.5f,
                     colors = SliderDefaults.colors(
                         thumbColor = MaterialTheme.colorScheme.primary,
-                        activeTrackColor = MaterialTheme.colorScheme.primary
+                        activeTrackColor = MaterialTheme.colorScheme.primary,
+                        inactiveTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.24f)
                     )
                 )
             }
