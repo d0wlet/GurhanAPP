@@ -89,9 +89,8 @@ fun HomeScreen(
                         .fillMaxWidth()
                         .height(headerHeight)
                         .graphicsLayer {
-                            // Apply parallax and fade effects
+                            // Only apply fade effect, no translation to ensure click stability
                             alpha = headerAlpha
-                            translationY = -firstItemTranslationY
                         }
                 ) {
                     HeroSection(
