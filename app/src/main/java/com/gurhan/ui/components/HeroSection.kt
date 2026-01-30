@@ -19,11 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gurhan.R
 import com.gurhan.ui.theme.*
-import java.time.chrono.HijrahDate
-import java.time.format.DateTimeFormatter
 import android.util.Log
-import java.util.Calendar
-import java.util.Date
+import java.util.*
 import java.text.SimpleDateFormat
 
 @Composable
