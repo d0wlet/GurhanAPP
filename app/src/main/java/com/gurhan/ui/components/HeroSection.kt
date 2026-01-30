@@ -166,7 +166,6 @@ fun HeroSection(
                     )
                 }
             }
-            }
             Spacer(modifier = Modifier.weight(1f))
         }
     }

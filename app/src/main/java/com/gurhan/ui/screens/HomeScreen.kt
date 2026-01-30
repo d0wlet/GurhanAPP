@@ -31,8 +31,6 @@ fun HomeScreen(
     viewModel: QuranViewModel = viewModel(),
     onSurahClick: (Surah) -> Unit,
     onSettingsClick: () -> Unit,
-    onSurahClick: (Surah) -> Unit,
-    onSettingsClick: () -> Unit,
     onVerseClick: (Surah, Verse) -> Unit,
     onCalendarClick: () -> Unit
 ) {

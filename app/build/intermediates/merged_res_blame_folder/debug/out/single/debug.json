@@ -1,0 +1,54 @@
+[
+    {
+        "merged": "com.gurhan.app-merged_res-51:/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "com.gurhan.app-main-53:/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.gurhan.app-merged_res-51:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "com.gurhan.app-main-53:/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.gurhan.app-merged_res-51:/drawable_ic_book_open.xml.flat",
+        "source": "com.gurhan.app-main-53:/drawable/ic_book_open.xml"
+    },
+    {
+        "merged": "com.gurhan.app-merged_res-51:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.gurhan.app-main-53:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.gurhan.app-merged_res-51:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.gurhan.app-main-53:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.gurhan.app-merged_res-51:/drawable_ic_quran_rehal.xml.flat",
+        "source": "com.gurhan.app-main-53:/drawable/ic_quran_rehal.xml"
+    },
+    {
+        "merged": "com.gurhan.app-merged_res-51:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "com.gurhan.app-main-53:/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.gurhan.app-merged_res-51:/drawable_ic_settings.xml.flat",
+        "source": "com.gurhan.app-main-53:/drawable/ic_settings.xml"
+    },
+    {
+        "merged": "com.gurhan.app-merged_res-51:/drawable_tasbih.png.flat",
+        "source": "com.gurhan.app-main-53:/drawable/tasbih.png"
+    },
+    {
+        "merged": "com.gurhan.app-merged_res-51:/drawable_ic_circle.xml.flat",
+        "source": "com.gurhan.app-main-53:/drawable/ic_circle.xml"
+    },
+    {
+        "merged": "com.gurhan.app-merged_res-51:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.gurhan.app-main-53:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.gurhan.app-merged_res-51:/mipmap-anydpi-v26_ic_launcher_foreground.xml.flat",
+        "source": "com.gurhan.app-main-53:/mipmap-anydpi-v26/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.gurhan.app-merged_res-51:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.gurhan.app-main-53:/mipmap-xhdpi/ic_launcher.png"
+    }
+]
