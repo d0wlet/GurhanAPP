@@ -22,6 +22,7 @@ import com.gurhan.ui.theme.*
 import java.time.chrono.HijrahDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import android.util.Log
 
 @Composable
 fun HeroSection(
@@ -78,13 +79,13 @@ fun HeroSection(
                 Box(
                     modifier = Modifier
                         .wrapContentSize()
-                        .clip(RoundedCornerShape(14.dp))
+                        .clip(RoundedCornerShape(16.dp))
                         .clickable { 
-                            println("DEBUG: Calendar Clicked")
+                            Log.d("GurhanAPP", "Calendar button clicked")
                             onCalendarClick() 
                         }
-                        .background(Color.White.copy(alpha = 0.2f))
-                        .padding(horizontal = 16.dp, vertical = 10.dp)
+                        .background(Color.White.copy(alpha = 0.25f))
+                        .padding(horizontal = 20.dp, vertical = 12.dp)
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
