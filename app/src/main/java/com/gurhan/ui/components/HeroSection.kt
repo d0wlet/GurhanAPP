@@ -21,8 +21,10 @@ import com.gurhan.R
 import com.gurhan.ui.theme.*
 import java.time.chrono.HijrahDate
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 import android.util.Log
+import java.util.Calendar
+import java.util.Date
+import java.text.SimpleDateFormat
 
 @Composable
 fun HeroSection(
@@ -30,12 +32,27 @@ fun HeroSection(
     fontSizeScale: Float = 1.0f,
     onCalendarClick: () -> Unit
 ) {
-    // Get current Hijri date (always needed)
+    // Get current date (using safe Calendar for API 24 compatibility)
+    val formattedDate = remember {
+        val sdf = SimpleDateFormat("dd MMMM yyyy", Locale("tr"))
+        sdf.format(Date())
+    }
+    
+    // Note: Hijri calculation usually needs a library on < API 26
+    // We'll show a fallback or simplified version if on older API
     val hijriDate = remember {
-        val today = java.time.LocalDate.now()
-        val hDate = HijrahDate.from(today)
-        val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("tr"))
-        hDate.format(formatter)
+        try {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                val today = java.time.LocalDate.now()
+                val hDate = java.time.chrono.HijrahDate.from(today)
+                val formatter = java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("tr"))
+                hDate.format(formatter)
+            } else {
+                formattedDate
+            }
+        } catch (e: Throwable) {
+            formattedDate
+        }
     }
 
     Box(

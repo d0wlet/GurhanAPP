@@ -30,7 +30,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             // Only add signingConfig if secrets are available (fixes CI failures)
             if (System.getenv("KEYSTORE_PASSWORD") != null) {
                 signingConfig = signingConfigs.getByName("release")
@@ -40,9 +40,13 @@ android {
                 "proguard-rules.pro"
             )
         }
+        debug {
+            isMinifyEnabled = false
+        }
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -97,4 +101,6 @@ dependencies {
     
     // JSON Parsing
     implementation("com.google.code.gson:gson:2.10.1")
+    
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }
