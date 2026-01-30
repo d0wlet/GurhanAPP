@@ -78,15 +78,15 @@ fun HeroSection(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Hijri Date in a small transparent card
-                Surface(
-                    color = Color.White.copy(alpha = 0.15f),
-                    shape = RoundedCornerShape(12.dp),
+                Box(
                     modifier = Modifier
                         .wrapContentSize()
+                        .clip(RoundedCornerShape(12.dp))
                         .clickable { onCalendarClick() }
+                        .background(Color.White.copy(alpha = 0.15f))
+                        .padding(horizontal = 12.dp, vertical = 6.dp)
                 ) {
                     Row(
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
