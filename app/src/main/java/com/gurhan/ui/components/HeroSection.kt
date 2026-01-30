@@ -29,11 +29,7 @@ fun HeroSection(
     fontSizeScale: Float = 1.0f,
     onCalendarClick: () -> Unit
 ) {
-    if (verseOfTheDay == null) return
-
-    val (surah, verse) = verseOfTheDay
-
-    // Get current Hijri date
+    // Get current Hijri date (always needed)
     val hijriDate = remember {
         val today = java.time.LocalDate.now()
         val hDate = HijrahDate.from(today)
@@ -71,7 +67,7 @@ fun HeroSection(
                 .padding(top = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Header Row with Hijri Date Card
+            // Header Row with Hijri Date Card (Always interactive)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -116,57 +112,64 @@ fun HeroSection(
             Spacer(modifier = Modifier.weight(1f))
 
             // Glassmorphism Card for Verse of the Day
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(Color.White.copy(alpha = 0.15f))
-                    .padding(20.dp)
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+            if (verseOfTheDay != null) {
+                val (surah, verse) = verseOfTheDay
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(Color.White.copy(alpha = 0.15f))
+                        .padding(20.dp)
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_quran_rehal),
-                            contentDescription = null,
-                            tint = AccentGoldLight,
-                            modifier = Modifier.size(18.dp)
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_quran_rehal),
+                                contentDescription = null,
+                                tint = AccentGoldLight,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Text(
+                                text = "Günüň Aýaty",
+                                style = MaterialTheme.typography.labelLarge,
+                                color = AccentGoldLight,
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 1.sp
+                            )
+                        }
+
+                        // Turkmen Translation
                         Text(
-                            text = "Günüň Aýaty",
-                            style = MaterialTheme.typography.labelLarge,
-                            color = AccentGoldLight,
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 1.sp
+                            text = verse.turkmenTranslation,
+                            color = Color.White,
+                            fontSize = (18 * fontSizeScale).sp,
+                            fontWeight = FontWeight.Medium,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                            maxLines = 4,
+                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.titleLarge.copy(lineHeight = 26.sp)
+                        )
+
+                        Text(
+                            text = "— ${surah.name}, ${verse.verseNumber} —",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color.White.copy(alpha = 0.8f),
+                            fontWeight = FontWeight.Light,
+                            fontSize = (13 * fontSizeScale).sp
                         )
                     }
-
-                    // Turkmen Translation
-                    Text(
-                        text = verse.turkmenTranslation,
-                        color = Color.White,
-                        fontSize = (18 * fontSizeScale).sp,
-                        fontWeight = FontWeight.Medium,
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                        maxLines = 4,
-                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.titleLarge.copy(lineHeight = 26.sp)
-                    )
-
-                    Text(
-                        text = "— ${surah.name}, ${verse.verseNumber} —",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.White.copy(alpha = 0.8f),
-                        fontWeight = FontWeight.Light,
-                        fontSize = (13 * fontSizeScale).sp
-                    )
                 }
+            } else {
+                // Loading state for verse
+                CircularProgressIndicator(color = Color.White.copy(alpha = 0.5f))
             }
+            
             Spacer(modifier = Modifier.weight(1f))
         }
     }
