@@ -31,7 +31,10 @@ fun HomeScreen(
     viewModel: QuranViewModel = viewModel(),
     onSurahClick: (Surah) -> Unit,
     onSettingsClick: () -> Unit,
-    onVerseClick: (Surah, Verse) -> Unit
+    onSurahClick: (Surah) -> Unit,
+    onSettingsClick: () -> Unit,
+    onVerseClick: (Surah, Verse) -> Unit,
+    onCalendarClick: () -> Unit
 ) {
     val surahs by viewModel.surahs.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -85,7 +88,11 @@ fun HomeScreen(
                 }
                 .align(Alignment.TopCenter)
         ) {
-            HeroSection(verseOfTheDay, fontSizeScale)
+             HeroSection(
+                verseOfTheDay = verseOfTheDay,
+                fontSizeScale = fontSizeScale,
+                onCalendarClick = onCalendarClick
+            )
         }
 
         // Foreground List

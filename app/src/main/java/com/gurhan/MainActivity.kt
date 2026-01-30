@@ -91,6 +91,9 @@ fun MainScreen(preferenceManager: com.gurhan.util.PreferenceManager) {
                     },
                     onVerseClick = { surah, verse ->
                         navController.navigate("surah/${surah.id}?verseId=${verse.verseNumber}")
+                    },
+                    onCalendarClick = {
+                        navController.navigate("calendar")
                     }
                 )
             }
@@ -118,6 +121,13 @@ fun MainScreen(preferenceManager: com.gurhan.util.PreferenceManager) {
             // Settings Screen
             composable("settings") {
                 SettingsScreen(preferenceManager)
+            }
+            
+            // Calendar Screen
+            composable("calendar") {
+                com.gurhan.ui.screens.CalendarScreen(
+                    onBackClick = { navController.popBackStack() }
+                )
             }
             
             // Surah Detail Screen

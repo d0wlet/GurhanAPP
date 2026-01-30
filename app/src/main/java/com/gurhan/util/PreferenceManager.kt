@@ -51,7 +51,7 @@ class PreferenceManager(context: Context) {
         prefs.edit().putInt(KEY_DARK_MODE, mode).apply()
         darkModeFlow.value = mode
     }
-    fun getDarkMode(): Int = prefs.getInt(KEY_DARK_MODE, 0)
+    fun getDarkMode(): Int = prefs.getInt(KEY_DARK_MODE, 1)
 
     // Flows for reactive updates
     val darkModeFlow = kotlinx.coroutines.flow.MutableStateFlow(getDarkMode())

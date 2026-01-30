@@ -25,7 +25,8 @@ import java.util.Locale
 @Composable
 fun HeroSection(
     verseOfTheDay: Pair<com.gurhan.data.model.Surah, com.gurhan.data.model.Verse>?,
-    fontSizeScale: Float = 1.0f
+    fontSizeScale: Float = 1.0f,
+    onCalendarClick: () -> Unit
 ) {
     if (verseOfTheDay == null) return
 
@@ -79,7 +80,9 @@ fun HeroSection(
                 Surface(
                     color = Color.White.copy(alpha = 0.15f),
                     shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier.wrapContentSize()
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .clickable { onCalendarClick() }
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
@@ -109,7 +112,7 @@ fun HeroSection(
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.weight(1f))
 
             // Glassmorphism Card for Verse of the Day
             Box(
@@ -163,6 +166,8 @@ fun HeroSection(
                     )
                 }
             }
+            }
+            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }
