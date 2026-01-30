@@ -19,15 +19,17 @@ class QuranRepository(private val context: Context) : SQLiteOpenHelper(context, 
     }
 
     init {
-        // Copy DB from assets if not exists
-        val dbPath = context.getDatabasePath(DATABASE_NAME)
-        if (!dbPath.exists()) {
-            dbPath.parentFile?.mkdirs()
-            try {
+        try {
+            // Copy DB from assets if not exists
+            val dbPath = context.getDatabasePath(DATABASE_NAME)
+            if (!dbPath.exists()) {
+                Log.d("QuranRepository", "Database not found, copying from assets...")
+                dbPath.parentFile?.mkdirs()
                 copyDatabase(dbPath)
-            } catch (e: IOException) {
-                e.printStackTrace()
+                Log.d("QuranRepository", "Database copy successful.")
             }
+        } catch (e: Exception) {
+            Log.e("QuranRepository", "CRITICAL: Database initialization failed", e)
         }
     }
 

@@ -23,6 +23,23 @@ import com.gurhan.ui.screens.SettingsScreen
 import com.gurhan.ui.screens.SurahDetailScreen
 import com.gurhan.ui.screens.TasbihScreen
 import com.gurhan.ui.theme.GurhanTheme
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.background
 
 class MainActivity : ComponentActivity() {
     private lateinit var preferenceManager: com.gurhan.util.PreferenceManager
@@ -55,8 +72,74 @@ class MainActivity : ComponentActivity() {
             }
 
             GurhanTheme(darkTheme = isDark) {
-                MainScreen(preferenceManager)
+                GlobalCrashGuard {
+                    MainScreen(preferenceManager)
+                }
             }
+        }
+    }
+}
+
+@Composable
+fun GlobalCrashGuard(content: @Composable () -> Unit) {
+    var error by remember { mutableStateOf<Throwable?>(null) }
+
+    if (error != null) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFF1A1A1A))
+                .padding(24.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Text(
+                    text = "⚠️ Uygulama Hatasy",
+                    color = Color.Red,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Bagyşlaň, garaşylmadyk bir ýalňyşlyk ýüze çykdy. Bu maglumaty ant-gravity d0wlet-e iberiň:",
+                    color = Color.White,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color.Black)
+                        .border(1.dp, Color.Gray, RoundedCornerShape(12.dp))
+                        .padding(16.dp)
+                ) {
+                    Text(
+                        text = error?.stackTraceToString() ?: "Bilinmeýän ýalňyşlyk",
+                        color = Color(0xFF00FF00),
+                        fontFamily = FontFamily.Monospace,
+                        fontSize = 12.sp
+                    )
+                }
+                Spacer(modifier = Modifier.height(24.dp))
+                Button(
+                    onClick = { error = null },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
+                ) {
+                    Text("Tazeden synanyş (Reset)")
+                }
+            }
+        }
+    } else {
+        try {
+            content()
+        } catch (t: Throwable) {
+            error = t
         }
     }
 }

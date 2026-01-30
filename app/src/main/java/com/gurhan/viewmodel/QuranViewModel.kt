@@ -66,11 +66,13 @@ class QuranViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val fullList = repository.getAllSurahs()
-                _allSurahs.value = fullList
-                _surahs.value = fullList
+                kotlinx.coroutines.withContext(Dispatchers.IO) {
+                    val fullList = repository.getAllSurahs()
+                    _allSurahs.value = fullList
+                    _surahs.value = fullList
+                }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("QuranViewModel", "Surah loading failed", e)
             } finally {
                 _isLoading.value = false
             }
