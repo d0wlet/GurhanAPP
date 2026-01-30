@@ -63,6 +63,7 @@ fun HeroSection(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .statusBarsPadding()
                 .padding(24.dp)
                 .padding(top = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -77,10 +78,13 @@ fun HeroSection(
                 Box(
                     modifier = Modifier
                         .wrapContentSize()
-                        .clip(RoundedCornerShape(12.dp))
-                        .clickable { onCalendarClick() }
-                        .background(Color.White.copy(alpha = 0.15f))
-                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                        .clip(RoundedCornerShape(14.dp))
+                        .clickable { 
+                            println("DEBUG: Calendar Clicked")
+                            onCalendarClick() 
+                        }
+                        .background(Color.White.copy(alpha = 0.2f))
+                        .padding(horizontal = 16.dp, vertical = 10.dp)
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
