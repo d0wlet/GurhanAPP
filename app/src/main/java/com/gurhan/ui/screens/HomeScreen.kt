@@ -76,32 +76,30 @@ fun HomeScreen(
             }
         }
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(headerHeight)
-                .graphicsLayer {
-                    alpha = headerAlpha
-                    translationY = -firstItemTranslationY
-                }
-                .align(Alignment.TopCenter)
-        ) {
-             HeroSection(
-                verseOfTheDay = verseOfTheDay,
-                fontSizeScale = fontSizeScale,
-                onCalendarClick = onCalendarClick
-            )
-        }
-
         // Foreground List
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = listState,
             contentPadding = PaddingValues(bottom = 100.dp)
         ) {
-             // Spacer for Header Visibility
+            // Header Content (Interactive)
             item {
-                Spacer(modifier = Modifier.height(headerHeight - 20.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(headerHeight)
+                        .graphicsLayer {
+                            // Apply parallax and fade effects
+                            alpha = headerAlpha
+                            translationY = -firstItemTranslationY
+                        }
+                ) {
+                    HeroSection(
+                        verseOfTheDay = verseOfTheDay,
+                        fontSizeScale = fontSizeScale,
+                        onCalendarClick = onCalendarClick
+                    )
+                }
             }
             
             // Search Bar
